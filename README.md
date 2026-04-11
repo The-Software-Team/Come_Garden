@@ -1,6 +1,8 @@
 ## A ) Seed Bank
 
 ![Community Garden Rental System Overview](diagrams/seed_bank.png)
+![Community Garden Rental System Overview](diagrams/activity_seed_bank.png)
+
 
 ### UC-SB-01: Deposit Seeds
 **Goal**: Allow a user to deposit seeds into the system and optionally earn credits based on seed quality.
@@ -168,6 +170,7 @@
 ## B ) Tool Library
 
 ![Community Garden Rental System Overview](diagrams/tool_library.png)
+![Community Garden Rental System Overview](diagrams/activity_tool_library.png)
 
 ### UC-TL-01: Book Tool
 **Goal**: Allow a user to book a tool for a specific duration or be placed on a waitlist if unavailable.
@@ -326,6 +329,7 @@
 ## C ) Volunteer System
 
 ![Community Garden Rental System Overview](diagrams/volunteer_system.png)
+![Community Garden Rental System Overview](diagrams/activity_volunteer_system.png)
 
 ### UC-VS-01: Add Member
 **Goal**: Register a new volunteer member into the system and initialize their contribution tracking.
@@ -496,6 +500,7 @@
 ## D ) Market Place
 
 ![Community Garden Rental System Overview](diagrams/market_place.png)
+![Community Garden Rental System Overview](diagrams/activity_market_place.png)
 
 ### UC-MP-01: Create Listing
 **Goal**: Allow a member (seller) to create a listing for an item in the marketplace.
@@ -703,6 +708,7 @@
 ## E ) Rental Service
 
 ![Community Garden Rental System Overview](diagrams/rental_service.png)
+![Community Garden Rental System Overview](diagrams/activity_rental_service.png)
 
 ### UC-RS-01: Apply for Plot Rental
 **Goal**: Allow a member to apply for renting a garden plot.
@@ -868,3 +874,8 @@
 **Alternative or Unsuccessful Scenarios**:
 - **A1: No active rentals**  
   No action performed
+
+
+## Plot Service (INTERNAL)
+ 
+![Community Garden Rental System Overview](diagrams/activity_plot_service.png)
