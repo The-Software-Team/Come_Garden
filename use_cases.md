@@ -1,5 +1,3 @@
-now we should remove this and build one use case: , so give me updated readme: ## A ) Seed Bank
-
 ![Community Garden Rental System Overview](diagrams/seed_bank.png)
 ![Community Garden Rental System Overview](diagrams/activity_seed_bank.png)
 
