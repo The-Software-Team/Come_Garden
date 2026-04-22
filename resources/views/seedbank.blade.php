@@ -9,7 +9,7 @@
             depositUrl: "{{ route('seedbank.deposit') }}",
         };
     </script>
-    
+
     @vite([
         'resources/css/app.css',
         'resources/css/seedbank.css',
@@ -17,21 +17,21 @@
         'resources/js/seedbank.js'
     ])
 
-   
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>Seed Bank 999</h1>
+    <h1>Seed Bank</h1>
 
     <!-- SUCCESS / ERROR FEEDBACK -->
     <div id="messageBox"></div>
 
     <!-- DEPOSIT FORM -->
     <section class="card">
-        
+
        <h2>Deposit Seeds</h2>
 
         <form id="depositForm">
