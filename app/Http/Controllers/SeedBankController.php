@@ -6,22 +6,22 @@ use Illuminate\Support\Facades\Log;
 
 use App\Contracts\SeedBank\SeedBankServiceInterface;
 use App\Http\Requests\DepositSeedRequest;
+use App\Http\Requests\WithdrawSeedRequest;
 
 class SeedBankController extends Controller
 {
     public function __construct(
         private SeedBankServiceInterface $service
     ) {}
-
-    public function create()
-    {
-        return view('seedbank');
+    # NOTE: DepostSeedRequest and WithdrawSeedRequest are typehints
+       
+    public function store(DepositSeedRequest $request) {
+        $result = $this->service->deposit($request->validated());
+        return response()->json($result);
     }
 
-    public function store(DepositSeedRequest $request)
-    {
-        $this->service->deposit($request->validated());
-
-        return redirect()->back()->with('success', 'Seeds deposited successfully!');
+    public function withdraw(WithdrawSeedRequest $request) {
+        $result = $this->service->withdraw($request->validated());
+        return response()->json($result);
     }
 }

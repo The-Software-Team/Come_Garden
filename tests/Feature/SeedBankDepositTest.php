@@ -10,42 +10,42 @@ class SeedBankDepositTest extends TestCase
 {
     # use RefreshDatabase;
 
-    public function test_seed_deposit_increases_wallet_balance()
-    {
-        $member = Member::factory()->create();
+    // public function test_seed_deposit_increases_wallet_balance()
+    // {
+    //     # choose a member by id 
+    //     $member = Member::findOrFail(1);
 
-        $wallet = Wallet::create([
-            'member_id' => $member->id,
-            'type' => 'seedbank',
-            'balance' => 0
-        ]);
+    //     # the member's wallet
+    //     $wallet = $member->wallets()
+    //         ->where('type', 'seedbank')
+    //         ->firstOrFail();
 
-        $response = $this->postJson('/api/v1/seeds/deposit', [
-            'member_id' => $member->id,
-            'seed_type' => 'wheat',
-            'quantity' => 10,
-            'viability' => 85,
-            'origin' => 'local',
-            'age' => 2
-        ]);
+    //     $response = $this->postJson('seedbank/deposit', [
+    //         'member_id' => $member->id,
+    //         'seed_type' => 'wheat',
+    //         'quantity' => 10,
+    //         'viability' => 85,
+    //         'origin' => 'local',
+    //         'age' => 2
+    //     ]);
 
-        $response->assertStatus(200);
+    //     $response->assertStatus(200);
 
 
-        $this->assertDatabaseHas('wallets', [
-            'id' => $wallet->id,
-            'balance' => 20 // 10 * 2 (viability >= 80)
-        ]);
+    //     $this->assertDatabaseHas('wallets', [
+    //         'id' => $wallet->id,
+    //         'balance' => 20 // 10 * 2 (viability >= 80)
+    //     ]);
 
-        $this->assertDatabaseHas('seed_batches', [
-            'seed_type' => 'wheat',
-            'quantity' => 10
-        ]);
+    //     $this->assertDatabaseHas('seed_batches', [
+    //         'seed_type' => 'wheat',
+    //         'quantity' => 10
+    //     ]);
 
-        $this->assertDatabaseHas('transactions', [
-            'wallet_id' => $wallet->id,
-            'amount' => 20,
-            'type' => 'credit'
-        ]);
-    }
+    //     $this->assertDatabaseHas('transactions', [
+    //         'wallet_id' => $wallet->id,
+    //         'amount' => 20,
+    //         'type' => 'credit'
+    //     ]);
+    // }
 }

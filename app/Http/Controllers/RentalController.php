@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+
 use App\Http\Requests\ApplyRentalRequest;
-use App\Contracts\RentalServiceInterface;
+use App\Contracts\Rental\RentalServiceInterface;
 use App\Http\Controllers\Controller;
 
 class RentalController extends Controller
@@ -17,7 +19,6 @@ class RentalController extends Controller
         $result = $this->service->apply(
             $request->validated()
         );
-
         return response()->json($result);
     }
 }

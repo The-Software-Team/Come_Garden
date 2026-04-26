@@ -16,12 +16,12 @@ use App\Events\SeedBank\SeedDeposited;
 class SeedBankService implements SeedBankServiceInterface
 {
     public function deposit(array $data)
-    {
+    { 
         return DB::transaction(function () use ($data) {
 
+            // 1. Explicit Validation
             $member = Member::findOrFail($data['member_id']);
 
-            // 1. Create Seed Batch (domain record)
             $batch = SeedBatch::create([
                 'member_id' => $member->id,
                 'seed_type' => $data['seed_type'],
@@ -32,15 +32,13 @@ class SeedBankService implements SeedBankServiceInterface
                 'status'    => 'accepted',
             ]);
 
-            // 2. Business rule (credit calculation)
+            // 2. Business rule 
             $credits = $data['quantity'];
 
             if ($data['viability'] >= 80) {
                 $credits *= 2;
             }
 
-
-            // 3. Wallet update 
             $wallet = $member->wallets()
                 ->where('type', 'seedbank')
                 ->firstOrFail();
@@ -48,21 +46,19 @@ class SeedBankService implements SeedBankServiceInterface
             $wallet->increment('balance', $credits);
 
 
-            Transaction::create([
+            $transaction = Transaction::create([
                 'wallet_id' => $wallet->id,
                 'amount'    => $credits,
                 'type'      => 'credit',
                 'reason'    => 'seed_deposit',
             ]);
 
-
-            // 4. EVENT (can be queued later)
+            // 3. EVENT (can be queued later)
             event(new SeedDeposited(
                 memberId: $member->id,
                 batchId: $batch->id,
                 credits: $credits
             ));
-
 
             return [
                 'batch_id' => $batch->id,
