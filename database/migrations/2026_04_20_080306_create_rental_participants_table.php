@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('rental_participants', function (Blueprint $table) {
             $table->id();
     
-            $table->foreignId('rental_id')->constrained()->restrictOnDelete();
-            $table->foreignId('member_id')->constrained()->restrictOnDelete();
+            $table->foreignId('rental_id');
+            $table->foreignId('member_id');
 
             $table->float('share');
             $table->decimal('cost', 12, 2);

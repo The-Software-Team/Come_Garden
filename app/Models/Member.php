@@ -7,12 +7,15 @@ use App\Models\RentalApplication;
 use App\Models\RentalParticipant;
 use App\Models\Wallet;
 
+
 class Member extends BaseModel
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'password'
     ];
 
     // Wallets

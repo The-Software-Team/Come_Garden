@@ -12,15 +12,19 @@ class MemberSeeder extends Seeder
     public function run(): void
     {
         Member::factory()
-            ->count(10)
-            ->create()
-            ->each(function ($member) {
-
-                Wallet::create([
-                    'member_id' => $member->id,
-                    'type' => 'seedbank',
-                    'balance' => 100, // starting credits
-                ]);
-            });
+        ->count(10)
+        ->has(
+            Wallet::factory()->state([
+            'type' => 'seedbank',
+            'balance' => 100,
+            ])
+        )
+        ->has(
+            Wallet::factory()->state([
+            'type' => 'credits',
+            'balance' => 0,
+            ])
+        )
+        ->create();
     }
 }

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('tool_waitlists', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('tool_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tool_id');
+            $table->foreignId('member_id');
 
             $table->integer('priority_score')->default(0);
             $table->integer('duration_hours');

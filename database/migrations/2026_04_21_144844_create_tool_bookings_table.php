@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('tool_bookings', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('tool_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tool_id');
+            $table->foreignId('member_id');
 
             $table->dateTime('start_time');
             $table->dateTime('end_time');

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('rental_applications', function (Blueprint $table) {
             $table->id();
         
-            $table->foreignId('member_id')->constrained()->restrictOnDelete();
-            $table->foreignId('plot_id')->constrained()->restrictOnDelete();
+            $table->foreignId('member_id');
+            $table->foreignId('plot_id');
         
             $table->float('share');
             $table->boolean('auto_renew')->default(false);

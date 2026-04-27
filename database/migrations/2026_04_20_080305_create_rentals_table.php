@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('rentals', function (Blueprint $table) {
             $table->id();
     
-            $table->foreignId('plot_id')->constrained()->restrictOnDelete();
-            $table->foreignId('season_id')->constrained()->restrictOnDelete();
+            $table->foreignId('plot_id');
+            $table->foreignId('season_id');
 
             $table->string('status')->default('active');
             $table->date('start_date')->nullable();

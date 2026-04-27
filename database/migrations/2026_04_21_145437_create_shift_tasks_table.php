@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('shift_tasks', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('shift_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('shift_id');
 
             $table->string('name');
             $table->string('category');
