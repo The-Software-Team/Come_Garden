@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('shift_assignments', function (Blueprint $table) {
         $table->id();
 
-        $table->foreignId('shift_id')->constrained()->cascadeOnDelete();
-        $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+        $table->foreignId('shift_id');
+        $table->foreignId('member_id');
         $table->foreignId('shift_task_id')->nullable()->constrained()->nullOnDelete();
 
         $table->string('role')->nullable();

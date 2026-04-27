@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('tool_penalties', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('tool_booking_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('member_id');
+            $table->foreignId('tool_booking_id');
 
             $table->string('type');
             // service, fine

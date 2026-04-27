@@ -22,9 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(RentalServiceInterface::class, RentalService::class);
         $this->app->bind(SeedBankServiceInterface::class, SeedBankService::class);
         $this->app->bind(WalletServiceInterface::class, WalletService::class);
+        
+        $this->app->bind(RentalServiceInterface::class, RentalService::class);
+     
         // ...
     }
 

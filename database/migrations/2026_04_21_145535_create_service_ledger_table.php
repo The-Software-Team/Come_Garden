@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('service_ledger', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('member_id');
 
             $table->integer('total_hours')->default(0);
             $table->integer('heavy_hours')->default(0);

@@ -17,7 +17,6 @@
         'resources/js/seedbank.js'
     ])
 
-
 </head>
 
 <body>
