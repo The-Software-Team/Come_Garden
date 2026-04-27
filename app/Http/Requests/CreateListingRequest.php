@@ -8,7 +8,7 @@ class CreateListingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member_id' => 'required|exists:members,id',
+            'member_id' => 'required|exists:member,id',
             'item'      => 'required|string',
             'quantity'  => 'required|integer|min:1',
             'type'      => 'required|string',

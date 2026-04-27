@@ -22,6 +22,11 @@ class Plot extends BaseModel
         return $this->hasOne(Rental::class);
     }
 
+    public function applications()
+    {
+        return $this->hasMany(RentalApplication::class);
+    }
+
     public function waitlist()
     {
         return $this->hasMany(RentalApplication::class);

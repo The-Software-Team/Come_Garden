@@ -4,9 +4,11 @@ namespace App\Contracts\Rental;
 
 interface RentalServiceInterface
 {
-    public function apply(array $data);
+    public function apply(array $data): array;
 
-    public function approve(int $applicationId);
+    public function rentPlot(int $plotId, int $seasonId): array;
 
-    public function processWaitlist(int $plotId);
+    public function endRentals(int $plotId, int $newSeasonId): array;
 }
+
+

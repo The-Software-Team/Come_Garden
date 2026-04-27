@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('member_id')->constrained()->restrictOnDelete();
+            $table->foreignId('member_id');
             $table->string('type'); // main (money used for rent) | seedbank
             $table->decimal('balance', 12, 2)->default(0);
         

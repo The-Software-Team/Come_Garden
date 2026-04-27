@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plot_neighbors', function (Blueprint $table) {
-            $table->foreignId('plot_id')->constrained('plots')->restrictOnDelete();
-            $table->foreignId('neighbor_id')->constrained('plots')->restrictOnDelete();
+            $table->foreignId('plot_id');
+            $table->foreignId('neighbor_id');
 
             $table->primary(['plot_id', 'neighbor_id']);
 

@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('swap_requests', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('shift_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('shift_id');
 
-            $table->foreignId('requester_id')->constrained('members')->cascadeOnDelete();
-            $table->foreignId('target_id')->constrained('members')->cascadeOnDelete();
+            $table->foreignId('requester_id');
+            $table->foreignId('target_id');
 
             $table->string('status')->default('pending');
             // pending, approved, rejected

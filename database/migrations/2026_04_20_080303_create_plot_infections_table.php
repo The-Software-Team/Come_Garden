@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('plot_infections', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('plot_id')->constrained()->restrictOnDelete();
+            $table->foreignId('plot_id');
 
             $table->string('type');
             $table->date('infection_date');

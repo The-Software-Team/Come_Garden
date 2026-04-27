@@ -2,24 +2,21 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-
 use App\Models\Member;
 use App\Models\SeedBatch;
-use App\Models\Transaction;
-
 use App\Contracts\SeedBank\SeedBankServiceInterface;
+use App\Contracts\Wallet\WalletServiceInterface;
 
-use App\Events\SeedBank\SeedDeposited;
-
-class SeedBankService implements SeedBankServiceInterface
+class SeedBankService extends BaseService implements SeedBankServiceInterface
 {
-    public function deposit(array $data)
-    { 
-        return DB::transaction(function () use ($data) {
+    public function __construct(
+        private WalletServiceInterface $walletService
+    ) {}
 
-            // 1. Explicit Validation
+    public function deposit(array $data)
+    {
+        return $this->transaction(function () use ($data) {
+
             $member = Member::findOrFail($data['member_id']);
 
             $batch = SeedBatch::create([
@@ -32,47 +29,36 @@ class SeedBankService implements SeedBankServiceInterface
                 'status'    => 'accepted',
             ]);
 
-            // 2. Business rule 
+            // Business rule
             $credits = $data['quantity'];
-
             if ($data['viability'] >= 80) {
                 $credits *= 2;
             }
 
-            $wallet = $member->wallets()
-                ->where('type', 'seedbank')
-                ->firstOrFail();
+            $walletResult = $this->walletService->credit(
+                $member,
+                $credits,
+                'seed_deposit'
+            );
 
-            $wallet->increment('balance', $credits);
+            if (!$walletResult['success']) {
+                return $walletResult;
+            }
 
-
-            $transaction = Transaction::create([
-                'wallet_id' => $wallet->id,
-                'amount'    => $credits,
-                'type'      => 'credit',
-                'reason'    => 'seed_deposit',
-            ]);
-
-            // 3. EVENT (can be queued later)
-            event(new SeedDeposited(
-                memberId: $member->id,
-                batchId: $batch->id,
-                credits: $credits
+            // Event 
+            event(new \App\Events\SeedBank\SeedDeposited(
+                $member->id,
+                $batch->id,
+                $credits
             ));
 
-            return [
+            return $this->success([
                 'batch_id' => $batch->id,
-                'credits_added' => $credits,
-                'status' => 'processed'
-            ];
+                'credits_added' => $credits
+            ], 'Seeds deposited successfully');
         });
     }
 
     public function withdraw(array $data)
-    {
-        // Withdrawal logic (not implemented yet)
-        return [
-            'status' => 'withdrawal not implemented'
-        ];
-    }
+    { pass; }
 }

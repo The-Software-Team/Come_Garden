@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('seed_batches', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('member_id');
 
             $table->string('seed_type');
             $table->integer('quantity');
