@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+
 use Illuminate\Support\ServiceProvider;
 
 use App\Contracts\Rental\RentalServiceInterface;
@@ -11,6 +12,9 @@ use App\Services\SeedBankService;
 
 use App\Contracts\Wallet\WalletServiceInterface;
 use App\Services\WalletService;
+
+use App\Contracts\ToolLibrary\ToolLibraryServiceInterface;
+use App\Services\ToolLibraryService;
 // ...
 
 
@@ -26,11 +30,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(WalletServiceInterface::class, WalletService::class);
         
         $this->app->bind(RentalServiceInterface::class, RentalService::class);
+        $this->app->bind(ToolLibraryServiceInterface::class, ToolLibraryService::class);
      
         // ...
     }
-
-    /**
+   /**
      * Bootstrap any application services.
      */
     public function boot(): void
