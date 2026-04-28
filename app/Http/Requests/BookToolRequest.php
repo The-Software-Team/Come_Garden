@@ -8,7 +8,7 @@ class BookToolRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member_id' => 'required|exists:member,id',
+            'member_id' => 'required|exists:members,id',
             'tool_id'   => 'required|exists:tools,id',
             'hours'     => 'required|integer|min:1'
         ];

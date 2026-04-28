@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Member;
 use App\Models\Wallet;
+use App\Models\Role;
 
 use Illuminate\Database\Seeder;
 
@@ -11,6 +12,9 @@ class MemberSeeder extends Seeder
 {
     public function run(): void
     {
+        $adminRole = Role::Create(['name' => 'admin']);
+        $userRole =  Role::Create(['name' => 'user']);
+
         Member::factory()
         ->count(10)
         ->has(
@@ -25,6 +29,12 @@ class MemberSeeder extends Seeder
             'balance' => 0,
             ])
         )
-        ->create();
+        ->create()
+        ->each(function ($member) use ($userRole) {
+            $member->roles()->attach($userRole->id);
+        });
+    
+        $admin = Member::factory()->create();
+        $admin->roles()->attach($adminRole->id);
     }
 }
