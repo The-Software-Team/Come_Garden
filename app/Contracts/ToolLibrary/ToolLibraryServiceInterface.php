@@ -4,9 +4,11 @@ namespace App\Contracts\ToolLibrary;
 
 interface ToolLibraryServiceInterface
 {
-    public function book(array $data);
+    public function add_tool(array $data) : array;
 
-    public function return(array $data);
+    public function book_tool(array $data) : array;
 
-    public function reportDamage(array $data);
+    public function return_tool(array $data) : array;
+
+    public function reportDamage(array $data) : array;
 }

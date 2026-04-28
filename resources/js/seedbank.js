@@ -7,7 +7,7 @@ function showMessage(type, message, params=null) {
 
     if (!box) return;
     if (params) {
-        message += `<p> Batch ID: ${params.batch_id}, Credits Added: ${params.credits_added}, Status: ${params.status} </p>`;
+        message += `<p> Batch ID: ${params.batch_id}, Credits Added: ${params.credits_added}</p>`;
     }
     box.innerHTML = `
         <div class="alert ${type}">
@@ -59,7 +59,7 @@ document.getElementById("depositForm")?.addEventListener("submit", async (e) => 
         return;
     } 
 
-    const params = result.result
+    const params = result.result.data
     showMessage("success", "Seeds deposited successfully!", params);
         
 });

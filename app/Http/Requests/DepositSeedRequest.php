@@ -7,7 +7,7 @@ class DepositSeedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'member_id' => 'required|exists:member,id',
+            'member_id' => 'required|exists:members,id',
             'seed_type' => 'required|string',
             'quantity'  => 'required|integer|min:1',
             'viability' => 'required|integer|min:0|max:100',
