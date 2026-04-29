@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\Member;
 use App\Models\Rental;
 
-class RentalParticipant extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class RentalParticipant extends Model
 {
     protected $fillable = [
         'rental_id',

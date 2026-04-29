@@ -4,15 +4,17 @@ namespace App\Models;
 
 use App\Models\Member;
 
-class Listing extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Listing extends Model
 {
     protected $fillable = [
         'member_id',
         'item',
         'quantity',
         'type',
-        'status',
         'request',
+        'status',
     ];
 
     public function member()

@@ -8,7 +8,6 @@ class CreateShiftRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_id'   => 'required|exists:members,id',
             'start_date' => 'required|date',
             'days'       => 'required|integer|min:1'
         ];

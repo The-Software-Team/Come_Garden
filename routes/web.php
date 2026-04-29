@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
 
-use App\Http\Controllers\MySampleResourceController;
-use App\Http\Controllers\SeedBankController;
 use App\Http\Controllers\AuthController;
+
+use App\Http\Controllers\SeedBankController;
+use App\Http\Controllers\MarketController;
 use App\Http\Controllers\ToolController;
 
+use Illuminate\Support\Facades\Log;
 ## Seed Bank
 Route::prefix('seedbank')->group(function () {
     Route::view('/', 'seedbank');
@@ -26,6 +27,15 @@ Route::prefix('toollib')->group(function () {
 
     Route::post('addTool', [ToolController::class, 'store'])->name('tools.store');
 });
+
+## Markte Place
+Route::prefix('market')->group(function () {
+    Route::get('createListing', [MarketController::class, 'create'])->name('market.create');
+    Route::post('createListing', [MarketController::class, 'store'])->name('market.store');
+});
+
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -4,11 +4,11 @@ namespace App\Contracts\Marketplace;
 
 interface MarketplaceServiceInterface
 {
-    public function createListing(array $data);
+    public function createListing(array $data) : array;
 
-    public function createTrade(array $data);
+    public function createTrade(array $data)   : array;
 
-    public function askQuestion(array $data);
+    public function askQuestion(array $data)   : array;
 
-    public function answer(array $data);
+    public function answerQuestion(array $data) : array;
 }

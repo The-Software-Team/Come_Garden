@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\Plot;
 use App\Models\RentalParticipant;
 
-class Rental extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Rental extends Model
 {
     protected $fillable = [
         'plot_id',

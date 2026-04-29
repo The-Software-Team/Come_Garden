@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\Booking;
 use App\Models\ToolWaitlist;
 
-class Tool extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Tool extends Model
 {
     protected $fillable = [
         'name',

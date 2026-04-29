@@ -4,7 +4,9 @@ namespace App\Models;
 use App\Models\Rental;
 use App\Models\RentalApplication;
 
-class Plot extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Plot extends Model
 {
     protected $fillable = [
         'size',
@@ -37,8 +39,8 @@ class Plot extends BaseModel
         return $this->belongsToMany(Plot::class, 'plot_neighbors', 'plot_id', 'neighbor_id');
     }
 
-    public function infections()
-    {
-        return $this->hasMany(PlotInfection::class);
-    }
+    // public function infections()
+    // {
+    //     return $this->hasMany(PlotInfection::class);
+    // }
 }

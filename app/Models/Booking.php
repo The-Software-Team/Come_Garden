@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\Member;
 use App\Models\Tool;
 
-class Booking extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Booking extends Model
 {
     protected $fillable = [
         'tool_id',
