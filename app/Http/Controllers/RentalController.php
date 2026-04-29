@@ -1,12 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use Illuminate\Support\Facades\Log;
 
 use App\Http\Requests\ApplyRentalRequest;
 use App\Contracts\Rental\RentalServiceInterface;
 use App\Http\Controllers\Controller;
+
+use App\Models\Plot;
 
 class RentalController extends Controller
 {
@@ -14,11 +13,19 @@ class RentalController extends Controller
         private RentalServiceInterface $service
     ) {}
 
-    public function apply(ApplyRentalRequest $request)
+    public function create()
     {
-        $result = $this->service->apply(
-            $request->validated()
-        );
-        return response()->json($result);
+        $plots = Plot::get();
+
+        return view('rental.apply', compact('plots'));
+    }  
+
+    public function store(ApplyRentalRequest $request)
+    {
+        $data = $request->validated();
+        $data['member_id'] = auth()->user()->id;
+
+        $result = $this->service->apply($data);
+        return redirect()->route('rental.create')->with('message', 'Applied successfully!');
     }
 }

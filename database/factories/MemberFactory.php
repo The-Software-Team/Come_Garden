@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Member;
-use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 

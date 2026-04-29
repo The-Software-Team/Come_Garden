@@ -15,11 +15,6 @@ class MarketController extends Controller
         private MarketplaceServiceInterface $service
     ) {}
 
-    public function create() {
-        $members = Member::get();
-
-        return view('market.createListing', compact('members'));
-    }
     public function store(CreateListingRequest $request)
     {
         $data = $request->validated();
