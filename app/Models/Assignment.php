@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Assignment extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Assignment extends Model
 {
     protected $fillable = [
         'shift_id',
@@ -11,4 +13,9 @@ class Assignment extends BaseModel
         'status',
         'hours',
     ];
+
+    public function member() {
+        return $this->belongsTo(Member::class);
+    }
+
 }

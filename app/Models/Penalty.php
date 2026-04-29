@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\Booking;
 use App\Models\Member;
 
-class Penalty extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Penalty extends Model
 {
     protected $fillable = [
         'member_id',

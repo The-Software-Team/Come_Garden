@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Season extends BaseModel
+class Season extends Model
 {
     use HasFactory;
 
@@ -20,22 +21,13 @@ class Season extends BaseModel
         'end_date'   => 'datetime',
     ];
 
-    /*
-    |-----------------------------
-    | Relationships
-    |-----------------------------
-    */
+  
 
     public function rentals()
     {
         return $this->hasMany(Rental::class);
     }
 
-    /*
-    |-----------------------------
-    | Helpers
-    |-----------------------------
-    */
 
     public function isActive(): bool
     {

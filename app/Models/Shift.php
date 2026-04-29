@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Models\Assignment;
 
-class Shift extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Shift extends Model
 {
     protected $fillable = [
         'start_date',
