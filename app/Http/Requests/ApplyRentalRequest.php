@@ -8,7 +8,7 @@ class ApplyRentalRequest extends FormRequest
     {
         return [
             'plot_id' => 'required|exists:plots,id',
-            'share' => 'required|numeric|min:0.1|max:1'
+            'share' => 'required|in:1,0.5'
         ];
     }
 }
