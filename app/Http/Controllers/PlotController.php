@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-use App\Contracts\PlotServiceInterface;
+use App\Contracts\Plot\PlotServiceInterface;
 
 
 class PlotController extends Controller

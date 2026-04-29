@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\Member;
 use App\Models\Tool;
 
-class ToolWaitlist extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class ToolWaitlist extends Model
 {
     protected $fillable = [
         'tool_id',

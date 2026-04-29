@@ -16,6 +16,9 @@ class SeedBankController extends Controller
     # NOTE: DepostSeedRequest and WithdrawSeedRequest are typehints
        
     public function store(DepositSeedRequest $request) {
+
+    ## TODO: MOVE TO redirction instead of json
+
         $result = $this->service->deposit($request->validated());
         return response()->json($result);
     }

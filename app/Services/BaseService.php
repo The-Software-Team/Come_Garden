@@ -11,7 +11,6 @@ abstract class BaseService
     {
         try {
             return DB::transaction(fn() => $callback());
-
         } catch (\Throwable $e) {
             Log::error('Transaction failed', [
                 'error' => $e->getMessage()

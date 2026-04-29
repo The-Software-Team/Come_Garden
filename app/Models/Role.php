@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Models\Member;
 
-class Role extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
 {
     protected $fillable = [
         'name',

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class SeedBatch extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class SeedBatch extends Model
 {
     protected $fillable = [
         'member_id',

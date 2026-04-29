@@ -5,8 +5,9 @@ namespace App\Models;
 use App\Models\Member;
 use App\Models\Transaction;
 
+use Illuminate\Database\Eloquent\Model;
 
-class Wallet extends BaseModel
+class Wallet extends Model
 {
     use \Illuminate\Database\Eloquent\Factories\HasFactory;
 

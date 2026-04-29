@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class SwapRequest extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class SwapRequest extends Model
 {
     protected $fillable = [
         'requester_id',

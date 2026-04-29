@@ -15,6 +15,9 @@ use App\Services\WalletService;
 
 use App\Contracts\ToolLibrary\ToolLibraryServiceInterface;
 use App\Services\ToolLibraryService;
+
+use App\Contracts\Marketplace\MarketplaceServiceInterface;
+use App\Services\MarketPlaceService;
 // ...
 
 
@@ -31,12 +34,9 @@ class AppServiceProvider extends ServiceProvider
         
         $this->app->bind(RentalServiceInterface::class, RentalService::class);
         $this->app->bind(ToolLibraryServiceInterface::class, ToolLibraryService::class);
-     
-        // ...
+        $this->app->bind(MarketplaceServiceInterface::class, MarketPlaceService::class);
     }
-   /**
-     * Bootstrap any application services.
-     */
+
     public function boot(): void
     {
         //
