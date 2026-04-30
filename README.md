@@ -38,7 +38,7 @@ Install the following:
 
 ```bash
 cd C:\xampp\htdocs
-git clone https://github.com/The-Software-Team/Come_Garden.git
+git clone -b core-flow --single-branch https://github.com/The-Software-Team/Come_Garden.git
 cd Come_Garden
 ```
 
