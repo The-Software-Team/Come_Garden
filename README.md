@@ -16,7 +16,7 @@ It provides a unified platform supporting wallets, transactions, bookings, and s
 ## Tech Stack
 
 - Laravel 13.x
-- PHP 8.3+
+- PHP 8.2+
 - MySQL
 - Node.js + Vite
 - XAMPP (Apache + MySQL)
