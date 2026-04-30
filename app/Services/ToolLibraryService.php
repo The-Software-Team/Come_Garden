@@ -13,11 +13,6 @@ class ToolLibraryService implements ToolLibraryServiceInterface {
     public function add_tool(array $data): array
     {
         return DB::transaction(function () use ($data) {
-            // Authorization (throw, don't abort)
-            if (!auth()->user()?->isAdmin()) {
-                throw new \DomainException('Only admins can add tools.', 403);
-            }
-
             // Business rule
             if (Tool::where('name', $data['name'])->exists()) {
                 throw new \DomainException('Tool with this name already exists');

@@ -1,18 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\SeedBankController;
+use App\Http\Controllers\ToolController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\RentalController;
-use App\Http\Controllers\ToolController;
-use App\Models\Rental;
-use Illuminate\Support\Facades\Log;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
 ## Seed Bank
 Route::prefix('seedbank')->group(function () {
-    // Route::view('/', 'seedbank');
     Route::get('deposit',   [SeedBankController::class, 'create'])->name('seedbank.create');
     Route::post('deposit',  [SeedBankController::class, 'store'])->name('seedbank.store');
 });
@@ -20,9 +31,8 @@ Route::prefix('seedbank')->group(function () {
 
 ## Tool Library
 Route::prefix('toollib')->group(function () {
-    // Route::view('/', 'toollibrary');
-    Route::view('addTool', 'toollibrary.addTool')->name('tools.create'); 
-    Route::post('addTool', [ToolController::class, 'store'])->name('tools.store');
+    Route::view('addTool', 'toollibrary.addTool')->middleware(['auth', 'admin'])->name('tools.create'); 
+    Route::post('addTool', [ToolController::class, 'store'])->middleware(['auth', 'admin'])->name('tools.store');
 });
 
 ## Markte Place
@@ -34,24 +44,8 @@ Route::prefix('market')->group(function () {
 ## Rentals
 Route::prefix('rental')->group(function () {
     Route::get('apply', [RentalController::class, 'create'])->name('rental.create');
-//    Route::view('apply', 'rental.apply');
     Route::post('apply', [RentalController::class, 'store'])->name('rental.store');
 });
 
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
-
-Route::view('/login', 'auth.login');
-
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-
-
-
-
-// Route::resource('samble', MySampleResourceController::class);
-// Route::apiResource('tasks', TaskController::class);
+require __DIR__.'/auth.php';

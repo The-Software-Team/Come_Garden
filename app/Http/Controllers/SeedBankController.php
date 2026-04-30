@@ -20,7 +20,7 @@ class SeedBankController extends Controller
     public function store(DepositSeedRequest $request) {
 
         $data = $request->validated();
-        $data['member_id'] = auth()->user()->id;
+        $data['member_id'] = $request->user()->id;
 
         $result = $this->service->deposit($data);
         return redirect()->route('seedbank.create')->with('message', 'Deposited Successfully!');
