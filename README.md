@@ -86,7 +86,7 @@ npm run dev
 ```
 
 ## 8. Test
-Open in browser `http://localhost/Come_Garden/public/seedbank`
+Open in browser `http://localhost/Come_Garden/public/seedbank/deposit`
 
 After setup:
 - Deposit a seed
