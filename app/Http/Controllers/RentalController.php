@@ -26,6 +26,8 @@ class RentalController extends Controller
         $data['member_id'] = auth()->user()->id;
 
         $result = $this->service->apply($data);
-        return redirect()->route('rental.create')->with('message', 'Applied successfully!');
+
+        return redirect()->back();
+        // return redirect()->route('rental.myapplication')->with('message', 'Applied successfully!');
     }
 }

@@ -9,23 +9,48 @@ class PlotFactory extends Factory
 {
     protected $model = Plot::class;
 
+    private static int $gridX = 0;
+    private static int $gridY = 0;
+    private static int $maxX = 5;
+
     public function definition(): array
     {
-        $width = $this->faker->numberBetween(5, 20);
-        $height = $this->faker->numberBetween(5, 20);
+        // GRID POSITIONING (NOT RANDOM)
+        $x = self::$gridX * 10;
+        $y = self::$gridY * 10;
+
+        self::$gridX++;
+
+        if (self::$gridX >= self::$maxX) {
+            self::$gridX = 0;
+            self::$gridY++;
+        }
+
+        $size = $this->faker->randomElement(['small', 'large']);
+
+        // consistent sizing rules
+        $dimensions = $size === 'large'
+            ? [10, 10]
+            : [5, 5];
+
+        [$width, $height] = $dimensions;
 
         return [
-            'size' => $this->faker->randomElement(['small', 'large']),
+            'size' => $size,
 
-            'x' => $this->faker->numberBetween(0, 100),
-            'y' => $this->faker->numberBetween(0, 100),
+            'x' => $x,
+            'y' => $y,
 
             'width' => $width,
             'height' => $height,
 
             'area' => $width * $height,
 
-            'status' => 'available',
+            'status' => $this->faker->randomElement([
+                'available',
+                'rented',
+                'available'
+            ]),
 
             'soil_quality' => $this->faker->randomElement([
                 'poor',
@@ -33,35 +58,5 @@ class PlotFactory extends Factory
                 'rich'
             ]),
         ];
-    }
-
-    /**
-     * Helpful state for testing rental edge cases
-     */
-    public function small(): static
-    {
-        return $this->state(fn () => [
-            'size' => 'small',
-            'width' => 5,
-            'height' => 5,
-            'area' => 25,
-        ]);
-    }
-
-    public function large(): static
-    {
-        return $this->state(fn () => [
-            'size' => 'large',
-            'width' => 20,
-            'height' => 20,
-            'area' => 400,
-        ]);
-    }
-
-    public function richSoil(): static
-    {
-        return $this->state(fn () => [
-            'soil_quality' => 'rich',
-        ]);
     }
 }

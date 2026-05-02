@@ -14,15 +14,19 @@ return new class extends Migration
         Schema::create('plot_infections', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('plot_id');
+            $table->foreignId('plot_id')->constrained('plots')->onDelete('cascade');
 
-            $table->string('type');
-            $table->date('infection_date');
+            $table->string('type'); // blight, pest, fungus
+            $table->string('severity')->default('low'); // low, medium, high
+
+            $table->timestamp('infection_date');
+
+            // lifecycle tracking
+            $table->timestamp('resolved_at')->nullable();
 
             $table->timestamps();
-    
-            $table->index('plot_id');
-            $table->index('infection_date');
+
+            $table->index(['plot_id', 'infection_date']);
         });
     }
 
