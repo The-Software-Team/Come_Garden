@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('plot_neighbors', function (Blueprint $table) {
-            $table->foreignId('plot_id');
-            $table->foreignId('neighbor_id');
-
+            $table->foreignId('plot_id')->constrained('plots')->onDelete('cascade');
+            $table->foreignId('neighbor_id')->constrained('plots')->onDelete('cascade');
+    
             $table->primary(['plot_id', 'neighbor_id']);
-
+    
             $table->index('plot_id');
         });
     }

@@ -13,22 +13,26 @@ return new class extends Migration
     {
         Schema::create('plots', function (Blueprint $table) {
             $table->id();
-    
+        
             $table->enum('size', ['large', 'small']);
+        
             $table->float('x');
             $table->float('y');
             $table->float('width');
             $table->float('height');
             $table->float('area');
-
+        
             $table->string('status')->default('available');
             $table->string('soil_quality')->nullable();
-
+        
+            $table->string('infection_status')->nullable(); // healthy, infected, recovering
+            $table->string('infection_type')->nullable();
+            $table->timestamp('infection_date')->nullable();
+        
             $table->timestamps();
-    
-            $table->index('size');
-            $table->index('status');
-        });
+        
+            $table->index(['size', 'status']);
+        });    
     }
 
     /**
