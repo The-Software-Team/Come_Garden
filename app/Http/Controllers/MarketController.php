@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Member;
-use Illuminate\Support\Facades\Auth;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateListingRequest;
 use App\Contracts\Marketplace\MarketplaceServiceInterface;
