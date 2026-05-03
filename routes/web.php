@@ -13,7 +13,9 @@ use App\Http\Controllers\ToolController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\VolunteerController;
 
+use App\Http\Controllers\SeedBankAdminController;
 
+use App\Http\Controllers\MemberSeedBankController;
 
 
 
@@ -118,17 +120,37 @@ Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
 
 Route::get('/admin/plots', [PlotController::class, 'index'])->middleware('admin');
 
-// // Actions
-// Route::post('/plots/{plot}/plant', [PlotController::class, 'plant']);
-// Route::post('/plots/{plot}/fertilize', [PlotController::class, 'fertilize']);
-// Route::post('/plots/{plot}/infect', [PlotController::class, 'reportInfection']);
+Route::prefix('plots/{plot}')->group(function () {
 
-## Seed Bank
-Route::prefix('seedbank')->group(function () {
-    Route::view('/', 'seedbank');
-    Route::get('deposit',   [SeedBankController::class, 'create'])->name('seedbank.create');
-    Route::post('deposit',  [SeedBankController::class, 'store'])->name('seedbank.store');
+    Route::post('/plant', [PlotController::class, 'plant'])
+        ->name('plots.plant');
+
+    Route::post('/infection', [PlotController::class, 'reportInfection'])
+        ->name('plots.infection');
+
+    Route::get('/watering', [PlotController::class, 'wateringSchedule'])
+        ->name('plots.watering');
+
 });
+
+Route::prefix('seedbank')->name('seedbank.')->group(function () {
+    Route::get('/', [SeedBankController::class, 'profile'])
+        ->name('profile');
+
+    Route::get('/market', [SeedBankController::class, 'market'])
+        ->name('browse');
+
+    Route::get('deposit', [SeedBankController::class, 'depositForm'])
+        ->name('deposit.form');
+
+    Route::post('deposit', [SeedBankController::class, 'store'])
+        ->name('deposit.store');
+
+    Route::post('withdraw', [SeedBankController::class, 'withdraw'])
+        ->name('withdraw');
+});
+
+
 
 
 ## Tool Library

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 
 use App\Models\Member;
-use App\Models\Plot;
+use App\Models\Plot\Plot;
 use App\Models\RentalApplication;
 
 

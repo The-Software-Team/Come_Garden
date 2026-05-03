@@ -1,55 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Seed Bank</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+@extends('layouts.app')
 
-    <script>
-        window.seedbank = {
-            withdrawUrl: "{{ route('seedbank.withdraw') }}",
-        };
-    </script>
+@section('page-title', '🌾 Withdraw Seeds')
 
-    @vite([
-        'resources/css/app.css',
-        'resources/css/seedbank.css',
-        'resources/js/app.js',
-        'resources/js/seedbank.js'
-    ])
+@section('content')
 
+<form method="POST" action="{{ route('seedbank.withdraw') }}">
+    @csrf
 
-</head>
+    <select class="input" name="seed_type">
+        @foreach($seeds as $seed)
+            <option value="{{ $seed['type'] }}">
+                {{ $seed['seed_type'] }}
+            </option>
+        @endforeach
+    </select>
 
-<body>
+    <input class="input" type="number" name="quantity" placeholder="Quantity">
 
-<div class="container">
+    <button class="btn">Withdraw</button>
+</form>
 
-    <h1>Seed Bank</h1>
-
-    <div id="messageBox"></div>
-
-    <section class="card">
-
-       <h2>Withdraw Seeds</h2>
-
-        <form id="withdrawForm">
-
-            <label>Member ID</label>
-            <input type="number" name="member_id" required>
-
-            <label>Seed Type</label>
-            <input type="text" name="seed_type" required>
-
-            <label>Quantity</label>
-            <input type="number" name="quantity" required>
-
-            <button type="submit">Deposit</button>
-        </form>
-
-    </section>
-
-</div>
-</body>
-</html>
-
+@endsection

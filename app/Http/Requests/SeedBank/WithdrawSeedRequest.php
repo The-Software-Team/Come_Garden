@@ -1,5 +1,7 @@
 <?php
-namespace App\Http\Requests;
+
+namespace App\Http\Requests\SeedBank;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class WithdrawSeedRequest extends FormRequest
@@ -8,7 +10,7 @@ class WithdrawSeedRequest extends FormRequest
     {
         return [
             'seed_type' => 'required|string',
-            'quantity'  => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ];
     }
 }
