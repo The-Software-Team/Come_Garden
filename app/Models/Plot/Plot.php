@@ -1,5 +1,5 @@
 <?php
-namespace App\Models;
+namespace App\Models\Plot;
 
 use App\Models\Rental;
 use App\Models\RentalApplication;

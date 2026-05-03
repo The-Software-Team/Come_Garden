@@ -1,135 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>Seed Bank</title>
+@extends('layouts.app')
 
-<style>
-    body {
-        font-family: Arial;
-        background: #f1f8e9;
-        margin: 0;
-    }
+@section('page-title', '🌱 Deposit Seeds')
 
-    .navbar {
-        background: #2e7d32;
-        color: white;
-        padding: 15px 20px;
-    }
+@section('content')
 
-    .container {
-        padding: 30px;
-        display: flex;
-        justify-content: center;
-    }
+<form method="POST" action="{{ route('seedbank.deposit.store') }}">
+    @csrf
 
+    <input class="input" name="seed_type" placeholder="Seed type">
+    <input class="input" name="quantity" type="number" placeholder="Quantity">
+    <input class="input" name="viability" type="number" placeholder="Viability %">
+    <input class="input" name="age" type="number" placeholder="Age">
+    <input class="input" name="origin" placeholder="Origin">
+    <select class="input" name="owner_type">
+        <option value="inventory">My Inventory</option>
+        <option value="market">Market</option>
+    </select>
 
-    .card {
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        width: 420px;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
+    <button class="btn">Deposit</button>
+</form>
 
-    h1, h2 {
-        color: #2e7d32;
-    }
-
-    input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 6px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-
-    button {
-        width: 100%;
-        padding: 10px;
-        background: #2e7d32;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        
-    }
-
-    button:hover {
-        background: #1b5e20;
-    }
-
-    .success {
-        color: green;
-        margin-bottom: 10px;
-    }
-
-    .error {
-        color: red;
-        font-size: 13px;
-    }
-</style>
-
-</head>
-
-<body>
-
-<div class="navbar">
-    🌱 Seed Bank
-</div>
-
-<div class="container">
-
-    <div class="card">
-
-        <h2>Deposit Seeds</h2>
-
-        {{-- Success Message --}}
-        @if(session('message'))
-            <div class="success">{{ session('message') }}</div>
-        @endif
-
-        <form method="POST" action="{{ route('seedbank.store') }}">
-            @csrf
-
-            <label>Seed Type</label>
-            <input type="text" name="seed_type" value="{{ old('seed_type') }}" required>
-            @error('seed_type')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
-            <label>Quantity</label>
-            <input type="number" name="quantity" value="{{ old('quantity') }}" required>
-            @error('quantity')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
-            <label>Viability (%)</label>
-            <input type="number" name="viability" min="0" max="100" value="{{ old('viability') }}" required>
-            @error('viability')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
-            <label>Origin (Optional)</label>
-            <input type="text" name="origin" value="{{ old('origin') }}">
-            @error('origin')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
-            <label>Age (Optional)</label>
-            <input type="number" name="age" value="{{ old('age') }}">
-            @error('age')
-                <div class="error">{{ $message }}</div>
-            @enderror
-
-            <button type="submit">Deposit</button>
-        </form>
-
-    </div>
-
-</div>
-
-</body>
-</html>
+@endsection

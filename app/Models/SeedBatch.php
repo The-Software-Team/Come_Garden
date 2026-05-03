@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class SeedBatch extends Model
 {
     protected $fillable = [
-        'member_id',
+        'owner_id',
+        'owner_type',
         'seed_type',
         'quantity',
         'viability',
         'origin',
-        'age',
+        'age'
     ];
 }

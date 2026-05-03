@@ -5,7 +5,7 @@ use App\Http\Requests\ApplyRentalRequest;
 use App\Contracts\Rental\RentalServiceInterface;
 use App\Http\Controllers\Controller;
 
-use App\Models\Plot;
+use App\Models\Plot\Plot;
 
 class RentalController extends Controller
 {

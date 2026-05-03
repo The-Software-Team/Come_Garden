@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Plot;
+use App\Models\Plot\Plot;
 use App\Models\RentalParticipant;
 
 use Illuminate\Database\Eloquent\Model;

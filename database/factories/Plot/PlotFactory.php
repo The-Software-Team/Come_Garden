@@ -1,8 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Plot;
 
-use App\Models\Plot;
+
+use App\Models\Plot\Plot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PlotFactory extends Factory
