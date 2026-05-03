@@ -11,9 +11,4 @@ return [
         'url' => '/plots',
         'pattern' => 'plots*'
     ],
-    [
-        'label' => 'SeedBank',
-        'url' => '/seedbank',
-        'pattern' => 'seedbank*'
-    ],
 ];

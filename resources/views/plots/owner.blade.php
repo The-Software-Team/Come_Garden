@@ -21,6 +21,31 @@
         @endforelse
     </div>
 
+    <div class="panel">
+        <h3>🌱 Plant Crop</h3>
+
+        <form method="POST" action="{{ route('plots.plant', $plot->id) }}">
+            @csrf
+
+            <input class="input" type="text" name="type" placeholder="Crop type (e.g. tomato)">
+
+            <button class="btn">Plant</button>
+        </form>
+    </div>
+
+
+    <div class="panel">
+        <h3>🦠 Report Infection</h3>
+
+        <form method="POST" action="{{ route('plots.infection', $plot->id) }}">
+            @csrf
+
+            <input class="input" type="text" name="type" placeholder="Infection type">
+
+            <button class="btn-danger">Report</button>
+        </form>
+    </div>
+
     <!-- CENTER: PLOT INFO -->
     <div class="panel main">
         <h3>📍 Plot Overview</h3>

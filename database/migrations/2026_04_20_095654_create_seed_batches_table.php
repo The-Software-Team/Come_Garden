@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('seed_batches', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('member_id');
+            $table->enum('owner_type', ['inventory', 'market']);
+            $table->unsignedBigInteger('owner_id')->nullable(); // null for market
 
             $table->string('seed_type');
             $table->integer('quantity');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->integer('viability'); // 0–100 rule in service
             $table->string('origin');
             $table->integer('age');
+
 
             $table->timestamps();
         });

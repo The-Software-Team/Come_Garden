@@ -18,6 +18,10 @@ use App\Services\ToolLibraryService;
 
 use App\Contracts\Marketplace\MarketplaceServiceInterface;
 use App\Services\MarketPlaceService;
+
+use App\Contracts\Plot\PlotServiceInterface;
+use App\Services\PlotService;
+
 // ...
 
 
@@ -32,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SeedBankServiceInterface::class, SeedBankService::class);
         $this->app->bind(WalletServiceInterface::class, WalletService::class);
         
+        $this->app->bind(PlotServiceInterface::class, PlotService::class);
         $this->app->bind(RentalServiceInterface::class, RentalService::class);
         $this->app->bind(ToolLibraryServiceInterface::class, ToolLibraryService::class);
         $this->app->bind(MarketplaceServiceInterface::class, MarketPlaceService::class);

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Contracts\Rental\RentalServiceInterface;
 use App\Models\Member;
-use App\Models\Plot;
+use App\Models\Plot\Plot;
 use App\Models\RentalApplication;
 
 class RentalService implements RentalServiceInterface

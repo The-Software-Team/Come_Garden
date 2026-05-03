@@ -1,0 +1,242 @@
+/* =========================
+   Seed Bank Global Styles
+========================= */
+
+body.seedbank {
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    background: #f4f7f5;
+    color: #1f2937;
+    margin: 0;
+}
+
+/* =========================
+   Grid System
+========================= */
+
+.grid {
+    display: grid;
+}
+
+.grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.gap-6 {
+    gap: 1.5rem;
+}
+
+.col-span-4 {
+    grid-column: span 4 / span 4;
+}
+
+.col-span-5 {
+    grid-column: span 5 / span 5;
+}
+
+.col-span-8 {
+    grid-column: span 8 / span 8;
+}
+
+/* =========================
+   Typography
+========================= */
+
+h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* =========================
+   Seed List (LEFT PANEL)
+========================= */
+
+.seed-list {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.seed-list-item {
+    padding: 12px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.seed-list-item:hover {
+    background: #f0fdf4;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+/* Optional active state (future JS enhancement) */
+.seed-list-item.active {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+}
+
+/* =========================
+   Panel (RIGHT SIDE)
+========================= */
+
+.panel {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* =========================
+   Details Header
+========================= */
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.badge {
+    font-size: 0.75rem;
+    background: #ecfdf5;
+    color: #166534;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+/* =========================
+   Info Grid
+========================= */
+
+.grid-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.info-box {
+    background: #f9fafb;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    transition: 0.15s ease;
+}
+
+.info-box:hover {
+    border-color: #d1fae5;
+    background: #f0fdf4;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.info-value {
+    font-weight: 600;
+    margin-top: 3px;
+    font-size: 0.95rem;
+}
+
+/* =========================
+   Empty State
+========================= */
+
+.empty-state {
+    text-align: center;
+    color: #6b7280;
+    padding: 70px 20px;
+}
+
+.empty-state h3 {
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+/* =========================
+   Withdraw Section
+========================= */
+
+.withdraw-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* =========================
+   Inputs & Buttons
+========================= */
+
+input[type="number"],
+.withdraw-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.15s ease;
+}
+
+input[type="number"]:focus,
+.withdraw-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+}
+
+/* Main button */
+button,
+.withdraw-btn {
+    width: 100%;
+    background: #16a34a;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:hover,
+.withdraw-btn:hover {
+    background: #15803d;
+    transform: translateY(-1px);
+}
+
+/* Disabled state */
+button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =========================
+   Utilities
+========================= */
+
+.text-muted {
+    color: #9ca3af;
+    font-size: 0.8rem;
+}
+
+.space-y-3 > * + * {
+    margin-top: 12px;
+}

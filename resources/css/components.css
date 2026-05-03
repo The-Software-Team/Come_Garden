@@ -232,3 +232,26 @@
     color: #2f5d50;
     text-decoration: underline;
 }
+
+/* Profile */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.panel h3 {
+    margin-bottom: 15px;
+}
+
+.panel.danger {
+    border-color: #e57373;
+    background: #fff5f5;
+}
