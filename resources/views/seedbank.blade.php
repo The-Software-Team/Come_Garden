@@ -6,4 +6,5 @@
     <h1>
         SeedBanko
     </h1>
+    <p>Made by: Saged Nader</p>
 @endsection
