@@ -33,8 +33,12 @@ class MemberSeeder extends Seeder
         ->each(function ($member) use ($userRole) {
             $member->roles()->attach($userRole->id);
         });
-    
-        $admin = Member::factory()->create();
+
+        $admin = Member::factory()->create([
+            'name' => 'Saged Nader',
+            'email' => 'saged@example.com',
+            'password' => bcrypt('password'),
+        ]);
         $admin->roles()->attach($adminRole->id);
     }
 }
