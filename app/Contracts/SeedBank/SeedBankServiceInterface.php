@@ -9,11 +9,9 @@ interface SeedBankServiceInterface
 
     public function withdraw(array $data): array;
 
-    public function addInventoryItem(string $name, int $quantity, int $threshold): void;
+    public function addInventoryItem(array $data): void;
 
-    public function getUserCredits(Member $user): int;
-
-    public function getAvailableSeeds(): array;
+    public function checkSeedHealth(): array;
 
     public function checkInventoryAlerts(): array;
 }

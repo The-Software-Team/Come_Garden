@@ -18,7 +18,7 @@ class SeedBankController extends Controller
     public function profile() {
         // the seeds and credits of the member.
         $seeds = SeedBatch::where('owner_type', 'inventory')->where('owner_id', auth()->user()->id)->get();
-        
+
         $seedbank_wallet = Wallet::get()->where('member_id',auth()->user()->id)
             ->where('type', 'seedbank')
             ->first();

@@ -13,7 +13,6 @@ use App\Http\Controllers\ToolController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\VolunteerController;
 
-use App\Http\Controllers\SeedBankAdminController;
 
 use App\Http\Controllers\MemberSeedBankController;
 
@@ -91,8 +90,7 @@ use App\Http\Controllers\MemberSeedBankController;
 
 
 #########################################################################
-
-
+use App\Http\Controllers\AdminController;
 
 Route::middleware(['auth'])->group(function () {
 
@@ -148,9 +146,15 @@ Route::prefix('seedbank')->name('seedbank.')->group(function () {
 
     Route::post('withdraw', [SeedBankController::class, 'withdraw'])
         ->name('withdraw');
+
 });
 
 
+Route::middleware('admin')->prefix('admin')->group(function () {
+    Route::get('/seedbank', [AdminController::class, 'admin_seedbank']);
+
+    Route::post('/seedbank', [AdminController::class, 'admin_seedbank_store'])->name("admin_seedbank.store");
+});
 
 
 ## Tool Library

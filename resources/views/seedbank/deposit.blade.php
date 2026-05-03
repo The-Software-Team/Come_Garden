@@ -3,6 +3,11 @@
 @section('page-title', '🌱 Deposit Seeds')
 
 @section('content')
+@if(session('message'))
+    <div class="alert-garden success">
+        {{ session('message') }}
+    </div>
+@endif
 
 <form method="POST" action="{{ route('seedbank.deposit.store') }}">
     @csrf

@@ -76,6 +76,11 @@ function showSeed(seed) {
 }
 </script>
 @endsection
+@if(session('message'))
+    <div class="alert-garden success">
+        {{ session('message') }}
+    </div>
+@endif
 
 @section('content')
 <div class="grid grid-cols-12 gap-6">

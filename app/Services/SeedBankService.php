@@ -157,6 +157,14 @@ class SeedBankService implements SeedBankServiceInterface
         });
     }
 
+    public function addInventoryItem(array $data): void
+    {
+        InventoryItem::create([
+            'name' => $data['name'],
+            'quantity' => $data['quantity'],
+            'reorder_threshold' => $data['threshold'],
+        ]);
+    }
 
     public function checkSeedHealth(): array
     {
@@ -182,17 +190,7 @@ class SeedBankService implements SeedBankServiceInterface
                 ];
             }
         }
-
         return $alerts;
-    }
-
-    public function addInventoryItem(string $name, int $quantity, int $threshold): void
-    {
-        InventoryItem::create([
-            'name' => $name,
-            'quantity' => $quantity,
-            'reorder_threshold' => $threshold,
-        ]);
     }
 
     public function checkInventoryAlerts(): array
@@ -205,21 +203,6 @@ class SeedBankService implements SeedBankServiceInterface
                 'quantity' => $item->quantity,
             ])
             ->toArray();
-    }
-
-    public function getAvailableSeeds(): array
-    {
-        return SeedBatch::select('seed_type')
-            ->selectRaw('SUM(quantity) as quantity')
-            ->groupBy('seed_type')
-            ->get()
-            ->toArray();
-    }
-
-
-    public function getUserCredits(Member $member): int
-    {
-        return $member->wallet->balance ?? 0;
     }
 
     // helpers
