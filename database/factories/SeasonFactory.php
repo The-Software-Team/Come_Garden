@@ -16,51 +16,16 @@ class SeasonFactory extends Factory
 
         return [
             'name' => 'Season ' . $this->faker->numberBetween(1, 10),
-
             'start_date' => $start,
-            'end_date'   => $end,
-
-            'status' => 'active',
+            'end_date' => $end,
+            'status' => 'upcoming',
         ];
     }
 
-    /**
-     * Active season state (useful for rental tests)
-     */
-    public function active(): static
+    public function active()
     {
         return $this->state(fn () => [
             'status' => 'active',
         ]);
-    }
-
-    /**
-     * Future season state (for renewal tests)
-     */
-    public function future(): static
-    {
-        return $this->state(function () {
-            $start = now()->addMonth();
-            return [
-                'start_date' => $start,
-                'end_date' => (clone $start)->addMonths(3),
-                'status' => 'upcoming',
-            ];
-        });
-    }
-
-    /**
-     * Past season state (for end-rental logic)
-     */
-    public function past(): static
-    {
-        return $this->state(function () {
-            $start = now()->subMonths(4);
-            return [
-                'start_date' => $start,
-                'end_date' => (clone $start)->addMonths(3),
-                'status' => 'finished',
-            ];
-        });
     }
 }

@@ -13,7 +13,7 @@ class Season extends Model
         'name',
         'start_date',
         'end_date',
-        'status',
+        'status'
     ];
 
     protected $casts = [
@@ -29,18 +29,4 @@ class Season extends Model
     }
 
 
-    public function isActive(): bool
-    {
-        return $this->status === 'active';
-    }
-
-    public function isFinished(): bool
-    {
-        return $this->status === 'finished';
-    }
-
-    public function isUpcoming(): bool
-    {
-        return $this->status === 'upcoming';
-    }
 }

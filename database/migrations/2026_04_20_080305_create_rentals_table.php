@@ -22,7 +22,9 @@ return new class extends Migration
             $table->date('end_date')->nullable();
         
             $table->timestamps();
-        
+       
+            $table->unique(['plot_id', 'season_id']);
+
             $table->index('plot_id');
             $table->index('season_id');
             $table->index('status');

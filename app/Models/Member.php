@@ -32,16 +32,30 @@ class Member extends Authenticatable
         return $this->hasMany(Wallet::class);
     }
 
-    // Rentals
-    public function rentals()
+    public function getWallet(string $type): Wallet
     {
-        return $this->hasMany(RentalParticipant::class);
+        return $this->wallets()->firstOrCreate(
+            ['type' => $type],
+            ['balance' => 0]
+        );
     }
 
-    // Applications
-    public function rentalApplications()
+    // rentals
+    public function rentals()
     {
-        return $this->hasMany(RentalApplication::class);
+        return $this->hasManyThrough(
+            Rental::class,
+            RentalParticipant::class,
+            'member_id',   // FK on participants
+            'id',          // FK on rentals
+            'id',          // local key
+            'rental_id'    // local key on participants
+        );
+    }
+    
+    public function rentalParticipations()
+    {
+        return $this->hasMany(RentalParticipant::class);
     }
 
     public function penalties()

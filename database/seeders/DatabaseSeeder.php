@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\MemberSeeder;
-use Database\Seeders\PlotSeeder;
-
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,7 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             MemberSeeder::class,
-            PlotSeeder::class
+            PlotSeeder::class,
+            SeasonSeeder::class,
         ]);
     }
 }

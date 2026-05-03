@@ -18,7 +18,12 @@ class PlotController extends Controller
 
     public function index()
     {
-        $plots = Plot::with(['rental', 'infections'])->get();
+        $plots = Plot::with([
+            'rentals', 
+            'infections',
+            'rentalApplications.member',
+            'currentRental.participants'
+            ])->get();
     
         return view('admin.plots.index', compact('plots'));
     }

@@ -1,0 +1,179 @@
+/* =========================
+   GARDEN CONTROL CENTER UI
+   ========================= */
+
+:root {
+    --green: #2f7d32;
+    --green-light: #e9f7ec;
+    --danger: #c0392b;
+    --gray: #6b7280;
+    --panel: #ffffff;
+    --border: #e5e7eb;
+    --bg: #f9fafb;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   SELECT DROPDOWN (UNIFIED)
+   ========================= */
+
+.plot-select-btn {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.plot-select-btn:hover {
+    background: var(--bg);
+}
+
+/* dropdown container */
+.plot-menu {
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+/* dropdown item */
+.plot-menu-item {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-bottom: 1px solid #f1f1f1;
+    transition: 0.15s;
+}
+
+.plot-menu-item:hover {
+    background: var(--green-light);
+}
+
+.plot-menu-item:last-child {
+    border-bottom: none;
+}
+
+/* hidden utility */
+.hidden {
+    display: none;
+}
+
+/* =========================
+   PANEL
+   ========================= */
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 500px;
+}
+
+/* =========================
+   DETAILS HEADER
+   ========================= */
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* =========================
+   BADGE
+   ========================= */
+
+.badge {
+    background: var(--green-light);
+    color: var(--green);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+/* =========================
+   INFO GRID
+   ========================= */
+
+.grid-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.info-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.info-label {
+    font-size: 11px;
+    color: var(--gray);
+}
+
+.info-value {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* =========================
+   SECTION
+   ========================= */
+
+.section {
+    margin-top: 20px;
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.btn-primary {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+/* =========================
+   EMPTY STATE
+   ========================= */
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--gray);
+}
+
+.muted {
+    color: var(--gray);
+    font-size: 13px;
+}

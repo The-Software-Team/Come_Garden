@@ -25,9 +25,22 @@ class Plot extends Model
     ];
 
 
-    public function rental()
+    public function rentals()
     {
-        return $this->hasOne(Rental::class);
+        return $this->hasMany(Rental::class);
+    }
+    
+    public function currentRental()
+    {
+        return $this->hasOne(Rental::class)
+            ->where('status', 'active');
+    }
+
+    public function getCurrentRentalShareAttribute()
+    {
+        return $this->currentRental
+            ? $this->currentRental->participants->sum('share')
+            : 0;
     }
 
     public function rentalApplications()

@@ -110,13 +110,10 @@ Route::middleware('auth')->group(function () {
 });
 
 ## Plot
-
-// Plot viewer
 Route::get('/plots', [PlotController::class, 'market']);
 Route::get('/plots/{plot}', [PlotController::class, 'show'])->name('plots.show');
 Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
 
-Route::get('/admin/plots', [PlotController::class, 'index'])->middleware('admin');
 
 Route::prefix('plots/{plot}')->group(function () {
 
@@ -131,6 +128,7 @@ Route::prefix('plots/{plot}')->group(function () {
 
 });
 
+## SeedBank
 Route::prefix('seedbank')->name('seedbank.')->group(function () {
     Route::get('/', [SeedBankController::class, 'profile'])
         ->name('profile');
@@ -149,11 +147,12 @@ Route::prefix('seedbank')->name('seedbank.')->group(function () {
 
 });
 
-
 Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/seedbank', [AdminController::class, 'admin_seedbank']);
-
     Route::post('/seedbank', [AdminController::class, 'admin_seedbank_store'])->name("admin_seedbank.store");
+
+    Route::get('plots', [PlotController::class, 'index']);
+    Route::post('rentals', [RentalController::class, 'rent_plot']);
 });
 
 
@@ -173,6 +172,9 @@ Route::prefix('market')->group(function () {
 Route::prefix('rental')->group(function () {
     Route::get('apply', [RentalController::class, 'create'])->name('rental.create');
     Route::post('apply', [RentalController::class, 'store'])->name('rental.store');
+
+    Route::post('rent', [RentalController::class, 'rent'])->name('rental.rent');
+    Route::post('rent/run', [RentalController::class, 'run'])->name('rental.run');
 });
 });
 

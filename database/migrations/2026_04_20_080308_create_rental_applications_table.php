@@ -13,24 +13,23 @@ return new class extends Migration
     {
         Schema::create('rental_applications', function (Blueprint $table) {
             $table->id();
-        
-            $table->foreignId('member_id');
-            $table->foreignId('plot_id');
-        
-            $table->float('share');
+
+            $table->foreignId('member_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('plot_id')->constrained()->cascadeOnDelete();
+
+            $table->decimal('share', 3, 2);
             $table->boolean('auto_renew')->default(false);
-        
+
             $table->string('status')->default('pending');
             $table->integer('score')->default(0);
-        
-            $table->timestamps();
-        
-            $table->index('member_id');
-            $table->index('plot_id');
-            $table->index('status');
-        });
-    }
 
+            $table->timestamps();
+
+
+            $table->index('status');
+        }); 
+    }
+    
     /**
      * Reverse the migrations.
      */

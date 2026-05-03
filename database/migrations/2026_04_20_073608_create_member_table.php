@@ -16,7 +16,10 @@ return new class extends Migration
 
             $table->string('name');
             $table->string('email')->nullable()->unique();
-            $table->string('password')->hash();
+            $table->string('password');
+
+            $table->string('type')->default('normal');
+
 
             $table->timestamps();
         

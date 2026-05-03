@@ -13,19 +13,23 @@ return new class extends Migration
     {
         Schema::create('rental_participants', function (Blueprint $table) {
             $table->id();
-    
+        
             $table->foreignId('rental_id');
             $table->foreignId('member_id');
-
-            $table->float('share');
+        
+            $table->decimal('share', 3, 2); // 0.50, 1.00
             $table->decimal('cost', 12, 2);
+        
             $table->boolean('late')->default(false);
             $table->boolean('auto_renew')->default(false);
-
+        
+            $table->string('status')->default('active');
+        
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+        
             $table->timestamps();
-
-            $table->index('rental_id');
-            $table->index('member_id');
+        
         });
     }
 

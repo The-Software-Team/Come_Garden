@@ -120,11 +120,22 @@
 
 <button type="submit">Apply</button>
 
+
+
 </form>
 
 </div>
 
 </div>
 
+<form method="POST" action="{{ route('rental.run') }}">
+    @csrf
+    <input value="1" name="plot_id">
+    <input value="1" name="season_id">
+
+
+{{-- Select Plot --}}
+<label>Select Plot</label>
+<button type="submit">Rent</button>
 </body>
 </html>

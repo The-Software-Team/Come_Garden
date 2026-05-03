@@ -77,7 +77,7 @@ function showSeed(seed) {
 </script>
 @endsection
 @if(session('message'))
-    <div class="alert-garden success">
+    <div class="alert alert--success">
         {{ session('message') }}
     </div>
 @endif

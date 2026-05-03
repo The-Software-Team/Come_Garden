@@ -16,6 +16,8 @@ class MemberFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('password'),
+            'type' => $this->faker->randomElement(['normal', 'premium']),
+
         ];
     }
 }

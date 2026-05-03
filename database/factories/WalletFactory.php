@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Wallet;
-use App\Models\Member;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class WalletFactory extends Factory
@@ -13,9 +12,13 @@ class WalletFactory extends Factory
     public function definition(): array
     {
         return [
-            'member_id' => Member::factory(),
-            'type' => 'seedbank',
+            'type' => 'main',
             'balance' => $this->faker->numberBetween(0, 10000),
         ];
+    }
+
+    public function seedbank()
+    {
+        return $this->state(fn () => ['type' => 'seedbank']);
     }
 }
