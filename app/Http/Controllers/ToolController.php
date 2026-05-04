@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Request;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreToolRequest;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookToolRequest;
 use App\Http\Requests\ReturnToolRequest;
+
+use App\Models\Tool;
+use App\Models\Booking;
 
 use App\Contracts\ToolLibrary\ToolLibraryServiceInterface;
 
@@ -17,6 +20,17 @@ class ToolController extends Controller
     public function __construct(
         private ToolLibraryServiceInterface $service
     ) {}
+
+    public function index()
+    {
+        $tools = Tool::all();
+
+        $bookings = Booking::where('member_id', auth()->id())
+            ->whereIn('status', ['active', 'overdue'])
+            ->get();
+
+        return view('tools.index', compact('tools', 'bookings'));
+    }
 
     public function store(StoreToolRequest $request)
     {
@@ -35,22 +49,22 @@ class ToolController extends Controller
 
     public function book(BookToolRequest $request)
     {
-        return response()->json(
-            $this->service->book($request->validated())
-        );
+
+        $this->service->book_tool($request->validated());
+        return redirect()->back()->with('message', 'Booked Successfully');
     }
 
     public function return(ReturnToolRequest $request)
     {
-        return response()->json(
-            $this->service->return($request->validated())
-        );
+        $this->service->return_tool($request->validated());
+        return redirect()->back()->with('message', 'Returned Successfully');
     }
 
     public function reportDamage(Request $request)
     {
-        return response()->json(
-            $this->service->reportDamage($request->all())
-        );
+        $this->service->reportDamage($request->all());
+        return redirect()->back()->with('message', 'Reported Successfully');
     }
 }
+
+

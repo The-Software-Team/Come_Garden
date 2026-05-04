@@ -151,15 +151,22 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/seedbank', [AdminController::class, 'admin_seedbank']);
     Route::post('/seedbank', [AdminController::class, 'admin_seedbank_store'])->name("admin_seedbank.store");
 
+    Route::get('tools', [AdminController::class, 'admin_tool'])->name('admin.tools');
+    Route::post('tools', [AdminController::class, 'admin_tool_store'])->name('admin.tools.store');
+
     Route::get('plots', [PlotController::class, 'index']);
     Route::post('rentals', [RentalController::class, 'rent_plot']);
+
 });
 
 
 ## Tool Library
-Route::prefix('toollib')->group(function () {
-    Route::view('addTool', 'toollibrary.addTool')->middleware('admin')->name('tools.create'); 
-    Route::post('addTool', [ToolController::class, 'store'])->middleware('admin')->name('tools.store');
+Route::prefix('tools')->group(function () {
+    Route::get('/', [ToolController::class, 'index'])->name('tools');
+    Route::post('/', [ToolController::class, 'store']); // add_tool
+    Route::post('/book', [ToolController::class, 'book'])->name('tools.book');
+    Route::post('/return', [ToolController::class, 'return'])->name('tools.return');
+    Route::post('/damage', [ToolController::class, 'reportDamage'])->name('tools.damage');
 });
 
 ## Markte Place

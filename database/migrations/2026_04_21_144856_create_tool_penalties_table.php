@@ -15,16 +15,15 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('member_id');
-            $table->foreignId('tool_booking_id');
+            $table->foreignId('booking_id');
 
             $table->string('type');
-            // service, fine
 
             $table->integer('severity')->nullable(); 
-            // 1, 2, 3 OR monetary conversion
 
             $table->string('status')->default('active');
-            // active, resolved
+
+            $table->integer('amount')->default(0);
 
             $table->timestamps();
 
