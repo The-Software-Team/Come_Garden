@@ -20,7 +20,10 @@ use App\Contracts\Marketplace\MarketplaceServiceInterface;
 use App\Services\MarketPlaceService;
 
 use App\Contracts\Plot\PlotServiceInterface;
+use App\Contracts\Volunteer\VolunteerServiceInterface;
+
 use App\Services\PlotService;
+use App\Services\VolunteerService;
 
 // ...
 
@@ -40,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RentalServiceInterface::class, RentalService::class);
         $this->app->bind(ToolLibraryServiceInterface::class, ToolLibraryService::class);
         $this->app->bind(MarketplaceServiceInterface::class, MarketPlaceService::class);
+        $this->app->bind(VolunteerServiceInterface::class, VolunteerService::class);
     }
 
     public function boot(): void

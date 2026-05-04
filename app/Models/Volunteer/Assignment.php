@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Volunteer;
+use App\Models\Member;
 
 use Illuminate\Database\Eloquent\Model;
 

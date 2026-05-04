@@ -14,19 +14,13 @@ return new class extends Migration
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
 
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
 
-            $table->string('status')->default('scheduled');
-            // scheduled, rescheduled, completed, incomplete
-
-            $table->boolean('weather_adjusted')->default(false);
-            $table->string('weather_note')->nullable();
+            $table->string('status')->default('active');
 
             $table->timestamps();
-
-            $table->index(['status']);
-        });   
+        });
     }
 
     /**
@@ -34,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shift');
+        Schema::dropIfExists('shifts');
     }
 };

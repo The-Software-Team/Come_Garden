@@ -147,6 +147,8 @@ Route::prefix('seedbank')->name('seedbank.')->group(function () {
 
 });
 
+
+## Admin
 Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/seedbank', [AdminController::class, 'admin_seedbank']);
     Route::post('/seedbank', [AdminController::class, 'admin_seedbank_store'])->name("admin_seedbank.store");
@@ -154,8 +156,16 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('tools', [AdminController::class, 'admin_tool'])->name('admin.tools');
     Route::post('tools', [AdminController::class, 'admin_tool_store'])->name('admin.tools.store');
 
+    Route::get('/volunteer' , [VolunteerController::class, 'adminIndex'])
+        ->name('admin.volunteer');
+
+    Route::post('/volunteer', [VolunteerController::class, 'createShift'])
+        ->name('admin.volunteer.shift.create');
+  
+
     Route::get('plots', [PlotController::class, 'index']);
     Route::post('rentals', [RentalController::class, 'rent_plot']);
+    
 
 });
 
@@ -168,6 +178,22 @@ Route::prefix('tools')->group(function () {
     Route::post('/return', [ToolController::class, 'return'])->name('tools.return');
     Route::post('/damage', [ToolController::class, 'reportDamage'])->name('tools.damage');
 });
+
+## Volunteer System
+Route::prefix('volunteer')->group(function () {
+    Route::get('/', [VolunteerController::class, 'index'])->name('volunteer');
+
+    Route::post('/shift/assign', [VolunteerController::class, 'assign'])
+        ->name('volunteer.shift.assign');
+
+    Route::post('/shift/complete', [VolunteerController::class, 'complete'])
+        ->name('volunteer.shift.complete');
+
+    Route::post('/swap/request', [VolunteerController::class, 'requestSwap'])
+        ->name('volunteer.swap.request');
+
+});
+
 
 ## Markte Place
 Route::prefix('market')->group(function () {

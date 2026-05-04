@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tool;
 
 use App\Contracts\SeedBank\SeedBankServiceInterface;
+use App\Models\Volunteer\Shift;
 
 class AdminController extends Controller
 { 
@@ -52,6 +53,12 @@ class AdminController extends Controller
 
         return back()->with('message', 'Tool created successfully');
     }
+
+    public function admin_volunteer() {
+        $shifts = Shift::where('status', 'active')->get();
+        return view('admin.volunteer', ['shifts' => $shifts]);
+    }
+
 
 }
     

@@ -11,21 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shift_tasks', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('shift_id');
 
             $table->string('name');
-            $table->string('category');
-            // heavy, light
 
-            $table->integer('estimated_hours')->default(2);
+            $table->string('category')->default('light');
 
             $table->timestamps();
+        });
 
-            $table->index(['shift_id', 'category']);
-        });    
     }
 
     /**
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shift_tasks');
+        Schema::dropIfExists('tasks');
     }
 };

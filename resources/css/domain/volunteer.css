@@ -1,4 +1,8 @@
 
+/* =========================
+   Volunteer System Dashboard
+   ========================= */
+
 /* Page base */
 body {
     background: #f5f7fb;
@@ -19,19 +23,20 @@ h3 {
     margin-bottom: 12px;
 }
 
-/* Panels (cards) */
+/* Panels */
 .panel {
     background: #ffffff;
     border-radius: 12px;
     padding: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border: 1px solid #eef0f3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-/* Input fields */
+/* Inputs */
 .input {
     width: 100%;
     padding: 10px 12px;
+    margin-top: 8px;
     margin-bottom: 10px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
@@ -43,12 +48,11 @@ h3 {
 .input:focus {
     outline: none;
     border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
 /* Primary button */
-.btn-primary {
-    width: 100%;
+.btn {
     padding: 10px 12px;
     background: #4f46e5;
     color: white;
@@ -57,59 +61,82 @@ h3 {
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s ease;
+    display: inline-block;
 }
 
-.btn-primary:hover {
+.btn:hover {
     background: #4338ca;
 }
 
-/* Tool list container */
-.tool-list {
+/* Success button */
+.btn-success {
+    background: #16a34a;
+}
+
+.btn-success:hover {
+    background: #15803d;
+}
+
+/* =========================
+   List (left side navigation)
+   ========================= */
+
+.seed-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-/* Tool item */
-.tool-item {
+.seed-list-item {
+    background: #ffffff;
+    border: 1px solid #eef0f3;
+    padding: 12px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 14px;
-    background: #ffffff;
-    border-radius: 10px;
-    border: 1px solid #eef0f3;
-    cursor: pointer;
-    transition: 0.2s ease;
 }
 
-.tool-item:hover {
+.seed-list-item:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
     border-color: #c7d2fe;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
 }
 
-/* Status badge inside tool list */
-.status {
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: #eef2ff;
-    color: #4338ca;
-    font-weight: 600;
-}
+/* =========================
+   Badges
+   ========================= */
 
-/* Badge in details header */
 .badge {
     font-size: 12px;
-    padding: 5px 10px;
+    padding: 4px 10px;
     border-radius: 999px;
     background: #e0f2fe;
     color: #0369a1;
     font-weight: 600;
 }
 
-/* Details header */
+.badge.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge.danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* =========================
+   Details header
+   ========================= */
+
 .details-header {
     display: flex;
     justify-content: space-between;
@@ -117,14 +144,16 @@ h3 {
     margin-bottom: 16px;
 }
 
-/* Grid info blocks */
+/* =========================
+   Grid info (cards)
+   ========================= */
+
 .grid-info {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
 }
 
-/* Info box cards */
 .info-box {
     background: #f9fafb;
     border: 1px solid #eef0f3;
@@ -139,24 +168,42 @@ h3 {
 }
 
 .info-value {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: #111827;
 }
 
-/* Empty state */
+/* =========================
+   Sections (actions)
+   ========================= */
+
+.assign-section,
+.complete-section,
+.swap-section {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #eef0f3;
+}
+
+/* =========================
+   Empty state
+   ========================= */
+
 .empty-state {
     text-align: center;
-    padding: 40px 20px;
+    padding: 50px 20px;
     color: #6b7280;
 }
 
 .empty-state h3 {
-    margin-bottom: 6px;
     color: #374151;
+    margin-bottom: 6px;
 }
 
-/* Utility spacing */
+/* =========================
+   Layout helpers
+   ========================= */
+
 .mt-4 {
     margin-top: 16px;
 }
@@ -165,7 +212,10 @@ h3 {
     margin-top: 24px;
 }
 
-/* Responsive adjustments */
+/* =========================
+   Responsive
+   ========================= */
+
 @media (max-width: 1024px) {
     .grid-info {
         grid-template-columns: 1fr;

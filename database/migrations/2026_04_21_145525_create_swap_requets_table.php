@@ -15,16 +15,15 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('shift_id');
-
+            $table->foreignId('assignment_id');
             $table->foreignId('requester_id');
             $table->foreignId('target_id');
 
             $table->string('status')->default('pending');
-            // pending, approved, rejected
+
+            $table->text('reason')->nullable();
 
             $table->timestamps();
-
-            $table->index(['requester_id', 'status']);
         });
     }
 

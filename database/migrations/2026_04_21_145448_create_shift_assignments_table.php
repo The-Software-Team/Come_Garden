@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shift_assignments', function (Blueprint $table) {
+        Schema::create('assignments', function (Blueprint $table) {
         $table->id();
 
         $table->foreignId('shift_id');
         $table->foreignId('member_id');
-        $table->foreignId('shift_task_id')->nullable()->constrained()->nullOnDelete();
+        $table->foreignId('shift_task_id')->nullable();
 
         $table->string('role')->nullable();
-        // heavy, light
-
+        
         $table->string('status')->default('assigned');
-        // assigned, completed, missed
 
         $table->integer('hours')->default(0);
 
@@ -37,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shift_assignments');
+        Schema::dropIfExists('assignments');
     }
 };

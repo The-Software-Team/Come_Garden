@@ -1,43 +1,53 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Requests\Request;
-
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CreateShiftRequest;
-use App\Contracts\VolunteerServiceInterface;
+use Illuminate\Http\Request;
+use App\Models\Volunteer\Shift;
+use App\Contracts\Volunteer\VolunteerServiceInterface;
+use App\Models\Volunteer\Assignment;
 
 class VolunteerController extends Controller
 {
     public function __construct(
-        private VolunteerServiceInterface $service
+        protected VolunteerServiceInterface $service
     ) {}
 
-    public function createShift(CreateShiftRequest $request)
+
+    public function index() {
+        $assignments = Assignment::where('member_id', auth()->user()->id)->get();
+        return view('volunteer.index', ['assignments' => $assignments]);
+    }
+
+    public function adminIndex() {
+        $shifts = Shift::where('status', 'active')->get();
+        return view('admin.volunteer', ['shifts' => $shifts]);
+    }
+
+    public function createShift(Request $request)
     {
-        return response()->json(
-            $this->service->createShift($request->validated())
-        );
+        $this->service->createShift($request->all());
+
+        return redirect()->back()->with('success', 'Shift created successfully.');
     }
 
     public function assign(Request $request)
     {
-        return response()->json(
-            $this->service->assign($request->all())
-        );
+        $this->service->assign($request->all());
+
+        return redirect()->back()->with('success', '❌ No Implementation yet.');
     }
 
     public function complete(Request $request)
     {
-        return response()->json(
-            $this->service->complete($request->all())
-        );
+        $this->service->complete($request->all());
+
+        return redirect()->back()->with('success', '❌ No Implementation yet.');
     }
 
     public function requestSwap(Request $request)
     {
-        return response()->json(
-            $this->service->requestSwap($request->all())
-        );
+        $this->service->requestSwap($request->all());
+
+        return redirect()->back()->with('success', '❌ No Implementation yet.');
     }
 }
