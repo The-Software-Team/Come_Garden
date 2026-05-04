@@ -11,8 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('marketplace_questions', function (Blueprint $table) {
+        Schema::create('questions', function (Blueprint $table) {
             $table->id();
+    
+            $table->unsignedBigInteger('member_id');
+    
+            $table->text('content');
+            $table->integer('bounty')->default(0);
+    
+            $table->string('status')->default('open');
+            $table->unsignedBigInteger('accepted_answer_id')->nullable();
+    
             $table->timestamps();
         });
     }
@@ -22,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('marketplace_questions');
+        Schema::dropIfExists('questions');
     }
 };

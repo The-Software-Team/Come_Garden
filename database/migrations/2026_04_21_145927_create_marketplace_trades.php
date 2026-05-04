@@ -11,8 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('marketplace_trades', function (Blueprint $table) {
+        Schema::create('trades', function (Blueprint $table) {
             $table->id();
+    
+            $table->unsignedBigInteger('listing_id');
+            $table->unsignedBigInteger('member_id');
+    
+            $table->string('status')->default('pending');
+    
             $table->timestamps();
         });
     }
@@ -22,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('marketplace_trades');
+        Schema::dropIfExists('trades');
     }
 };

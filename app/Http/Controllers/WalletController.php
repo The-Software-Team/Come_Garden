@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Contracts\WalletServiceInterface;
+
+use App\Contracts\Wallet\WalletServiceInterface;
 
 class WalletController extends Controller
 {
@@ -11,10 +12,10 @@ class WalletController extends Controller
         private WalletServiceInterface $service
     ) {}
 
-    public function show($memberId)
-    {
-        return response()->json(
-            $this->service->getWallet($memberId)
-        );
-    }
+    // public function show($memberId)
+    // {
+    //     return response()->json(
+    //         $this->service->getWallet($memberId)
+    //     );
+    // }
 }

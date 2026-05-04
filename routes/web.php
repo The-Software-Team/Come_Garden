@@ -11,8 +11,8 @@ use App\Http\Controllers\RentalController;
 use App\Http\Controllers\SeedBankController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\MarketController;
-use App\Http\Controllers\VolunteerController;
 
+use App\Http\Controllers\VolunteerController;
 
 use App\Http\Controllers\MemberSeedBankController;
 
@@ -195,11 +195,23 @@ Route::prefix('volunteer')->group(function () {
 });
 
 
-## Markte Place
-Route::prefix('market')->group(function () {
-    Route::view('createListing', 'market.createListing')->name('market.create');
-    Route::post('createListing', [MarketController::class, 'store'])->name('market.store');
+## Market Place
+Route::prefix('marketplace')->group(function () {
+    Route::get('/', [MarketController::class, 'index'])
+        ->name('marketplace.index');
+
+    Route::get('/profile', [MarketController::class, 'profile'])->name('marketplace.profile');
+
+    Route::post('/listings', [MarketController::class, 'createListing'])->name('marketplace.listings.store');
+    Route::post('/trades', [MarketController::class, 'createTrade'])->name('marketplace.trades.store');
+    Route::post('/questions', [MarketController::class, 'askQuestion'])->name('marketplace.questions.store');
+    Route::post('/answers', [MarketController::class, 'answerQuestion'])->name('marketplace.answers.store');
+
+    Route::post('/profile/accept_answer', [MarketController::class, 'acceptAnswer'])->name('marketplace.answer.accept');
+    Route::post('/profile/accept_trade', [MarketController::class, 'acceptTrade'])->name('marketplace.trade.accept');
+
 });
+
 
 ## Rentals
 Route::prefix('rental')->group(function () {

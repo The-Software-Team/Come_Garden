@@ -14,15 +14,14 @@ return new class extends Migration
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
     
-            $table->foreignId('member_id')
-                ->constrained('members')
-                ->cascadeOnDelete();
+            $table->foreignId('member_id');
     
             // Listing data
             $table->string('item');
             $table->integer('quantity')->unsigned();
             $table->string('type');
             $table->text('request')->nullable();
+            $table->string('status')->nullable()->default("pending");
     
             $table->timestamps();
         });

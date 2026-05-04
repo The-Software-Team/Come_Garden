@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Models;
-
-use App\Models\Answer;
+namespace App\Models\Market;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,4 +18,10 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class);
     }
+
+    public function acceptedAnswer()
+    {
+        return $this->belongsTo(Answer::class, 'accepted_answer_id');
+    }
+
 }

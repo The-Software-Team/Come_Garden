@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Listing;
+use App\Models\Market\Listing;
+use App\Models\Market\Trade;
+use App\Models\Market\Question;
+use App\Models\Market\Answer;
+
 use App\Contracts\Marketplace\MarketplaceServiceInterface as Market;
 
 class MarketPlaceService implements Market {
 
-   function createListing(array $data) : array
+   public function createListing(array $data) : array
    {
      Listing::create($data);
      return [
@@ -15,20 +19,31 @@ class MarketPlaceService implements Market {
      'success' => True
      ];
   } 
- 
-   function createTrade(array $data) : array
-   {
-        return ['message' => "NO IMPLMENTATION YET"];
-   }
+    
+   public function createTrade(array $data): array
+    {
+        Trade::create($data);
+        return [
+            'success' => false,
+            'message' => 'Not implemented yet'
+        ];
+    }
 
-   function askQuestion(array $data) : array
-   {
-        return ['message' => "NO IMPLMENTATION YET"];
-   }
+    public function askQuestion(array $data): array
+    {
+        Question::create($data);
+        return [
+            'success' => false,
+            'message' => 'Not implemented yet'
+        ];
+    }
 
-   function answerQuestion(array $data): array
-   {
-        return ['message' => "NO IMPLMENTATION YET"];
-   }
-
+    public function answerQuestion(array $data): array
+    {
+        Answer::create($data);
+        return [
+            'success' => false,
+            'message' => 'Not implemented yet'
+        ];
+    }
 }
