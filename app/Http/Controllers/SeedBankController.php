@@ -63,8 +63,11 @@ class SeedBankController extends Controller
         $data = $request->validated();
         $data['owner_id'] = auth()->user()->id;
         
-        $this->service->deposit($data);
-        return redirect()->back()->with('message', "Seed Deposited Successfully");
+        $result = $this->service->deposit($data);
+        if(!$result->success)
+            return redirect()->back()->with('message', $result->message);
+
+        return redirect()->back()->with('message', $result->message);
     }
 
     public function withdraw(WithdrawSeedRequest $request) {

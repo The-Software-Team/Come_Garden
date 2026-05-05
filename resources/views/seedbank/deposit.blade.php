@@ -9,6 +9,12 @@
     </div>
 @endif
 
+@if ($errors->any())
+    <div class="alert alert--warning">
+        {{ $errors->first() }}
+    </div>
+@endif
+
 <form method="POST" action="{{ route('seedbank.deposit.store') }}">
     @csrf
 

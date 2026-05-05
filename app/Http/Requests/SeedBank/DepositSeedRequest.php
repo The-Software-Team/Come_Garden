@@ -13,8 +13,8 @@ class DepositSeedRequest extends FormRequest
             'seed_type' => 'required|string|max:100',
             'quantity' => 'required|integer|min:1',
             'viability' => 'required|integer|min:0|max:100',
-            'origin' => 'nullable|string|max:255',
             'age' => 'required|integer|min:0',
+            'origin' => 'nullable|string|max:255',
         ];
     }
 }

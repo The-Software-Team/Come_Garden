@@ -6,12 +6,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        // \App\Events\SeedDeposited::class => [
-        //     \App\Listeners\LogSeedDeposit::class,
-        // ],
-
-        // \App\Events\SeedWithdrawn::class => [
-        //     \App\Listeners\LogSeedWithdraw::class,
-        // ],
+        \App\Events\SeedBank\SeedWithdrawn::class => [
+            \App\Listeners\SeedBank\AboutWithdrawn::class,
+        ],
     ];
 }

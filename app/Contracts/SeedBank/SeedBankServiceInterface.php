@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Contracts\SeedBank;
-use App\Models\Member;
+
+use App\Support\ServiceResult;
 
 interface SeedBankServiceInterface
 {
-    public function deposit(array $data): array;
+    public function deposit(array $data): ServiceResult;
 
     public function withdraw(array $data): array;
 

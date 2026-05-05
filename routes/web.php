@@ -144,7 +144,6 @@ Route::prefix('seedbank')->name('seedbank.')->group(function () {
 
     Route::post('withdraw', [SeedBankController::class, 'withdraw'])
         ->name('withdraw');
-
 });
 
 
@@ -168,7 +167,6 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     
 
 });
-
 
 ## Tool Library
 Route::prefix('tools')->group(function () {

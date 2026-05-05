@@ -4,16 +4,22 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 
-use App\Models\Member;
+use App\Contracts\SeedBank\SeedBankServiceInterface;
+use App\Contracts\Wallet\WalletServiceInterface;
 
+use App\Services\BaseService;
+
+use App\Models\Member;
 use App\Models\SeedBatch;
 use App\Models\InventoryItem;
 
-use App\Contracts\SeedBank\SeedBankServiceInterface;
-use App\Contracts\Wallet\WalletServiceInterface;
-use phpDocumentor\Reflection\PseudoTypes\LowercaseString;
+use App\Events\SeedBank\SeedDeposited;
+use App\Events\SeedBank\SeedWithdrawn;
+use App\Events\SeedBank\InventoryItemAdded;
 
-class SeedBankService implements SeedBankServiceInterface
+use App\Support\ServiceResult;
+
+class SeedBankService extends BaseService implements SeedBankServiceInterface
 {
     private const HIGH_QUALITY_THRESHOLD = 80;
 
@@ -21,49 +27,47 @@ class SeedBankService implements SeedBankServiceInterface
         private WalletServiceInterface $walletService
     ) {}
 
-    public function deposit(array $data) : array
+    public function deposit(array $data) : ServiceResult
     {
-        return DB::transaction(function () use ($data) {
-            $member = Member::findOrFail($data['owner_id']);
-            
-            $batch = SeedBatch::create([
-                'owner_id' => $member->id,
-                'owner_type' => $data['owner_type'],
-                'seed_type' => $data['seed_type'],
-                'quantity'  => $data['quantity'],
-                'viability' => $data['viability'],
-                'origin'    => $data['origin'] ?? null,
-                'age'       => $data['age'] ?? null,
-                'status'    => 'accepted'
-            ]);
+        return $this->handleTransaction(function () use ($data) {
 
-            $credits = 0;
-            if($data['owner_type'] == "market") {
-                $credits = $data['quantity'];
-                if ($data['viability'] >= 80) {
-                    $credits *= 2;
+                $member = Member::find($data['owner_id']);
+                if(!$member)
+                    return ServiceResult::failure("Member Not Found");
+
+                $batch = SeedBatch::create([
+                    'owner_id' => $member->id,
+                    'owner_type' => $data['owner_type'],
+                    'seed_type' => $data['seed_type'],
+                    'quantity'  => $data['quantity'],
+                    'viability' => $data['viability'],
+                    'origin'    => $data['origin'] ?? null,
+                    'age'       => $data['age'] ?? null,
+                    'status'    => 'accepted'
+                ]);
+
+
+                $credits = 0;
+                if ($data['owner_type'] === 'market') {
+                    $credits = $data['quantity'];
+                    if ($data['viability'] >= self::HIGH_QUALITY_THRESHOLD) {
+                        $credits *= 2;
+                    }
+
+                    $this->walletService->credit(
+                        $member,
+                        $credits,
+                        'seed_deposit'
+                    );
                 }
-        
-                $this->walletService->credit(
-                    $member,
-                    $credits,
-                    'seed_deposit'
-                );
-           };
-           
-            # EVENT
-            // do this intead when you implmenet events
-            // SeedDeposited::dispatch(...)->afterCommit();
 
-            # Later we'll add a ServiceResult class
-            return [
-                'batch_id' => $batch->id,
-                'credits_added' => $credits,
-                'message' => 'Seed Depoited Successfully',
-                'success' => True
-                ];
+                event(new SeedDeposited($member->id, $data['quantity'], $credits));
 
-        });
+                return ServiceResult::success([
+                    'batch_id' => $batch->id,
+                    'credits_added' => $credits,
+                ], 'Seed Deposited Successfully');
+            });
         }
 
     public function withdraw(array $data): array
@@ -115,12 +119,6 @@ class SeedBankService implements SeedBankServiceInterface
                     'origin'    => $batch->origin,
                 ];
             }
-
-            # remove 0 quantity market batches
-            SeedBatch::where('owner_type', 'market')
-                ->where('quantity', 0)
-                ->delete();
-
             
             if ($taken > 0) {
                 $avg_age = round(collect($result)->avg('age'), 1);
@@ -130,7 +128,6 @@ class SeedBankService implements SeedBankServiceInterface
                     ->unique()
                     ->values();
                 
-                # create inventory batch
                 $batch = SeedBatch::create([
                     'owner_type' => 'inventory',
                     'owner_id'   => $member->id,
@@ -141,12 +138,15 @@ class SeedBankService implements SeedBankServiceInterface
                     'origin'   => $origins
                 ]);
             }
+
             // DEBIT WALLET
             $this->walletService->debit(
                 $member,
                 $quantity,
                 'seed_withdraw'
             );
+
+            event(new SeedWithdrawn($member->id, $taken));
 
             return [
                 'success' => true,
@@ -164,6 +164,8 @@ class SeedBankService implements SeedBankServiceInterface
             'quantity' => $data['quantity'],
             'reorder_threshold' => $data['threshold'],
         ]);
+
+        event(new InventoryItemAdded($data['name']));
     }
 
     public function checkSeedHealth(): array

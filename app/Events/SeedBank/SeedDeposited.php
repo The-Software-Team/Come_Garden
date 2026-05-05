@@ -6,7 +6,7 @@ class SeedDeposited
 {
     public function __construct(
         public int $memberId,
-        public int $batchId,
+        public int $quantity,
         public int $credits
     ) {}
 }
