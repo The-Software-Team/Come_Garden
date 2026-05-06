@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
             MemberSeeder::class,
             PlotSeeder::class,
             SeasonSeeder::class,
+            SeedBatchSeeder::class,
+            InventoryItemSeeder::class,
         ]);
     }
 }

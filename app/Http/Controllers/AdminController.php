@@ -14,19 +14,22 @@ class AdminController extends Controller
         private SeedBankServiceInterface $service,
     ) {}
 
-    public function admin_seedbank() {
-        $healthAlerts = $this->service->checkSeedHealth();
-        $inventoryAlerts = $this->service->checkInventoryAlerts();
-
+    public function admin_seedbank()
+    {
+        $healthAlerts = $this->service->checkSeedHealth()->data['alerts'] ?? [];
+        $inventoryAlerts = $this->service->checkInventoryAlerts()->data['alerts'] ?? [];
+    
         return view('admin.seedbank', compact('healthAlerts', 'inventoryAlerts'));
-
-    }
+    }   
 
     public function admin_seedbank_store(Request $request) {
         $data = $request->except('_token');
-        $this->service->addInventoryItem($data);
+        $result = $this->service->addInventoryItem($data);
 
-        return redirect()->back()->with('message', 'Inventory Item Added Successfully');
+        if(!$result->success)
+            return redirect()->back()->with('error', $result->message);
+
+        return redirect()->back()->with('message', $result->message);
     }
 
     public function admin_tool()

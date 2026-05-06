@@ -1,242 +1,293 @@
-/* =========================
-   Seed Bank Global Styles
-========================= */
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  SEEDBANK.CSS                                            ║
+   ║  Scoped styles for the Seed Bank module.                 ║
+   ║  All classes are prefixed seedbank_                      ║
+   ╚══════════════════════════════════════════════════════════╝ */
 
-body.seedbank {
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    background: #f4f7f5;
-    color: #1f2937;
-    margin: 0;
+/* ── Tokens ─────────────────────────────────────────────── */
+:root {
+    --seedbank_green_dark:  #3b6d11;
+    --seedbank_green_mid:   #639922;
+    --seedbank_green_light: #e8f0dc;
+    --seedbank_green_bg:    #f0f5e9;
+    --seedbank_green_focus: rgba(59, 109, 17, 0.12);
+    --seedbank_amber_bg:    #faeeda;
+    --seedbank_amber_text:  #633806;
+    --seedbank_border_green: #c0dd97;
 }
 
-/* =========================
-   Grid System
-========================= */
 
-.grid {
-    display: grid;
+/* ══════════════════════════════════════════════════════════
+   SHARED COMPONENTS
+   Used across deposit, browse, and index pages.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Page wrapper ───────────────────────────────────────── */
+.seedbank_page {
+    font-family: 'DM Sans', sans-serif;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
 }
 
-.grid-cols-12 {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-}
+/* ── Page header ────────────────────────────────────────── */
+.seedbank_header         { display: flex; align-items: center; gap: 14px; margin-bottom: 2rem; }
+.seedbank_header_icon    { width: 48px; height: 48px; border-radius: 50%; background: var(--seedbank_green_light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.seedbank_header_icon i  { font-size: 22px; color: var(--seedbank_green_dark); }
+.seedbank_title          { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 2px; }
+.seedbank_subtitle       { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
 
-.gap-6 {
-    gap: 1.5rem;
-}
+/* ── Alerts ─────────────────────────────────────────────── */
+.seedbank_alert          { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: var(--border-radius-md); margin-bottom: 1.5rem; font-size: 14px; border: 0.5px solid; }
+.seedbank_alert i        { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.seedbank_alert--success { background: var(--color-background-success); color: var(--color-text-success); border-color: var(--color-border-success); }
+.seedbank_alert--warning { background: var(--color-background-warning); color: var(--color-text-warning); border-color: var(--color-border-warning); }
 
-.col-span-4 {
-    grid-column: span 4 / span 4;
-}
-
-.col-span-5 {
-    grid-column: span 5 / span 5;
-}
-
-.col-span-8 {
-    grid-column: span 8 / span 8;
-}
-
-/* =========================
-   Typography
-========================= */
-
-h2 {
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-}
-
-h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-/* =========================
-   Seed List (LEFT PANEL)
-========================= */
-
-.seed-list {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-.seed-list-item {
-    padding: 12px 14px;
-    border-radius: 8px;
-    cursor: pointer;
+/* ── Section label ──────────────────────────────────────── */
+.seedbank_section_label {
+    font-size: 11px;
     font-weight: 500;
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0 0 12px;
+    display: block;
 }
 
-.seed-list-item:hover {
-    background: #f0fdf4;
-    color: #15803d;
-    border-color: #bbf7d0;
+/* ── Card shell ─────────────────────────────────────────── */
+.seedbank_card           { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+.seedbank_card_section   { padding: 1.25rem 1.5rem; }
+.seedbank_card_divider   { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 0; }
+
+/* ── Shared input ───────────────────────────────────────── */
+.seedbank_input {
+    height: 38px;
+    padding: 0 12px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
 }
+.seedbank_input:focus        { border-color: var(--seedbank_green_dark); box-shadow: 0 0 0 3px var(--seedbank_green_focus); }
+.seedbank_input::placeholder { color: var(--color-text-tertiary); }
+.seedbank_input_hint         { font-size: 12px; color: var(--color-text-tertiary); }
 
-/* Optional active state (future JS enhancement) */
-.seed-list-item.active {
-    background: #dcfce7;
-    color: #166534;
-    border-color: #86efac;
-}
-
-/* =========================
-   Panel (RIGHT SIDE)
-========================= */
-
-.panel {
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 22px;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
-    min-height: 420px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-/* =========================
-   Details Header
-========================= */
-
-.details-header {
-    display: flex;
-    justify-content: space-between;
+/* ── Submit button ──────────────────────────────────────── */
+.seedbank_submit {
+    height: 40px;
+    padding: 0 24px;
+    border-radius: var(--border-radius-md);
+    background: var(--seedbank_green_dark);
+    color: var(--seedbank_green_light);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+.seedbank_submit:hover { background: var(--seedbank_green_mid); }
+.seedbank_submit i     { font-size: 16px; }
+
+/* ── Badges ─────────────────────────────────────────────── */
+.seedbank_badge            { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
+.seedbank_badge--qty       { background: var(--seedbank_green_light); color: #27500a; }
+.seedbank_badge--inventory { background: var(--seedbank_green_light); color: #27500a; }
+.seedbank_badge--market    { background: var(--seedbank_amber_bg);    color: var(--seedbank_amber_text); }
+
+/* ── Avatar ─────────────────────────────────────────────── */
+.seedbank_avatar   { width: 44px; height: 44px; border-radius: 50%; background: var(--seedbank_green_light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.seedbank_avatar i { font-size: 22px; color: var(--seedbank_green_dark); }
+
+/* ── Empty state ────────────────────────────────────────── */
+.seedbank_empty_state     { padding: 2.5rem; text-align: center; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.seedbank_empty_state p   { font-size: 14px; color: var(--color-text-secondary); margin: 0; }
+
+
+/* ══════════════════════════════════════════════════════════
+   DEPOSIT PAGE  ·  seedbank/deposit.blade.php
+   ══════════════════════════════════════════════════════════ */
+
+.seedbank_field_grid       { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.seedbank_field            { display: flex; flex-direction: column; gap: 5px; }
+.seedbank_label            { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); }
+.seedbank_label span       { color: var(--color-text-danger); margin-left: 2px; }
+
+/* Viability badge (live JS feedback) */
+.seedbank_viability_badge  { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+
+/* Destination radio cards */
+.seedbank_destination_group          { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.seedbank_destination_option         { position: relative; cursor: pointer; }
+.seedbank_destination_option input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.seedbank_destination_card           { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 14px; display: flex; flex-direction: column; gap: 6px; transition: border-color 0.15s, background 0.15s; }
+.seedbank_destination_option input:checked + .seedbank_destination_card { border-color: var(--seedbank_green_dark); background: var(--seedbank_green_bg); }
+
+.seedbank_destination_card_icon      { width: 32px; height: 32px; border-radius: 8px; background: var(--seedbank_green_light); display: flex; align-items: center; justify-content: center; }
+.seedbank_destination_card_icon i    { font-size: 16px; color: var(--seedbank_green_dark); }
+.seedbank_destination_card_name      { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.seedbank_destination_card_desc      { font-size: 11px; color: var(--color-text-secondary); line-height: 1.4; }
+
+/* Card footer (deposit) */
+.seedbank_footer         { padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; background: var(--color-background-secondary); }
+.seedbank_cancel         { font-size: 14px; color: var(--color-text-secondary); text-decoration: none; padding: 8px 0; }
+
+
+/* ══════════════════════════════════════════════════════════
+   BROWSE PAGE  ·  seedbank/browse.blade.php
+   ══════════════════════════════════════════════════════════ */
+
+.seedbank_browse {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 16px;
+    min-height: 520px;
+}
+
+/* Sidebar */
+.seedbank_browse_sidebar        { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; display: flex; flex-direction: column; }
+.seedbank_browse_sidebar_header { padding: 14px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+
+.seedbank_search_wrap   { position: relative; }
+.seedbank_search_wrap i { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); pointer-events: none; }
+.seedbank_search {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px 0 32px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+    font-size: 13px;
+    color: var(--color-text-primary);
+    box-sizing: border-box;
+    outline: none;
+}
+.seedbank_search:focus { border-color: var(--seedbank_green_dark); box-shadow: 0 0 0 3px var(--seedbank_green_focus); }
+
+.seedbank_list              { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+.seedbank_list_item         { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; cursor: pointer; border-bottom: 0.5px solid var(--color-border-tertiary); transition: background 0.1s; }
+.seedbank_list_item:last-child { border-bottom: none; }
+.seedbank_list_item:hover   { background: var(--color-background-secondary); }
+.seedbank_list_item.active  { background: var(--seedbank_green_bg); border-left: 2px solid var(--seedbank_green_dark); padding-left: 14px; }
+.seedbank_list_item_name    { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.seedbank_list_item_qty     { font-size: 11px; color: var(--color-text-tertiary); }
+.seedbank_list_empty        { padding: 1rem; font-size: 13px; color: var(--color-text-secondary); }
+
+/* Detail panel */
+.seedbank_browse_panel  { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; display: flex; flex-direction: column; }
+
+.seedbank_panel_empty        { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 3rem; text-align: center; }
+.seedbank_panel_empty_icon   { width: 48px; height: 48px; border-radius: 50%; background: var(--seedbank_green_light); display: flex; align-items: center; justify-content: center; }
+.seedbank_panel_empty_icon i { font-size: 22px; color: var(--seedbank_green_dark); }
+.seedbank_panel_empty h2     { font-size: 15px; font-weight: 500; margin: 0; }
+.seedbank_panel_empty p      { font-size: 13px; color: var(--color-text-secondary); margin: 0; max-width: 200px; line-height: 1.5; }
+
+.seedbank_panel_detail   { display: flex; flex-direction: column; height: 100%; }
+.seedbank_detail_header  { padding: 16px 20px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; justify-content: space-between; }
+.seedbank_detail_title   { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 500; margin: 0; color: var(--color-text-primary); }
+
+.seedbank_detail_stats       { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 0.5px solid var(--color-border-tertiary); }
+.seedbank_stat               { padding: 14px 20px; border-right: 0.5px solid var(--color-border-tertiary); }
+.seedbank_stat:last-child    { border-right: none; }
+.seedbank_stat_label         { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-tertiary); display: block; margin-bottom: 4px; }
+.seedbank_stat_value         { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+.seedbank_stat_unit          { font-size: 12px; color: var(--color-text-secondary); font-weight: 400; }
+
+.seedbank_viability_bar  { height: 4px; background: var(--color-border-tertiary); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.seedbank_viability_fill { height: 100%; border-radius: 2px; background: var(--seedbank_green_dark); transition: width 0.3s; }
+
+.seedbank_detail_meta    { padding: 12px 20px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; gap: 20px; }
+.seedbank_meta_item      { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+.seedbank_meta_item i    { font-size: 14px; color: var(--color-text-tertiary); }
+
+.seedbank_withdraw_section { padding: 16px 20px; margin-top: auto; }
+.seedbank_withdraw_form    { display: flex; gap: 10px; align-items: center; }
+
+
+/* ══════════════════════════════════════════════════════════
+   INDEX PAGE  ·  seedbank/index.blade.php
+   ══════════════════════════════════════════════════════════ */
+
+.seedbank_profile_top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 200px;
+    gap: 16px;
     margin-bottom: 20px;
 }
 
-.badge {
-    font-size: 0.75rem;
-    background: #ecfdf5;
-    color: #166534;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-weight: 600;
+.seedbank_member_card  { display: flex; align-items: center; gap: 14px; padding: 16px 20px; }
+.seedbank_member_name  { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 500; margin: 0 0 2px; color: var(--color-text-primary); }
+.seedbank_member_sub   { font-size: 12px; color: var(--color-text-secondary); margin: 0; }
+
+.seedbank_credits_card  { background: var(--seedbank_green_bg); border: 0.5px solid var(--seedbank_border_green); border-radius: var(--border-radius-lg); padding: 16px 20px; }
+.seedbank_credits_label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--seedbank_green_dark); margin-bottom: 4px; display: block; }
+.seedbank_credits_value { font-size: 28px; font-weight: 500; color: #27500a; line-height: 1; }
+.seedbank_credits_sub   { font-size: 11px; color: var(--seedbank_green_mid); margin-top: 4px; display: block; }
+
+.seedbank_count_pill    { font-size: 11px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-secondary); border-radius: 20px; padding: 1px 8px; color: var(--color-text-secondary); font-weight: 400; margin-left: 6px; vertical-align: middle; }
+
+.seedbank_seed_grid        { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.seedbank_seed_card        { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+.seedbank_seed_card_top    { padding: 14px 16px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.seedbank_seed_name        { font-size: 14px; font-weight: 500; margin: 0; color: var(--color-text-primary); }
+.seedbank_seed_stats       { padding: 10px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.seedbank_seed_stat        { display: flex; flex-direction: column; gap: 1px; }
+.seedbank_seed_stat_label  { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-tertiary); }
+.seedbank_seed_stat_value  { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.seedbank_seed_footer      { padding: 8px 16px; border-top: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+.seedbank_seed_date        { font-size: 11px; color: var(--color-text-tertiary); display: flex; align-items: center; gap: 5px; }
+.seedbank_seed_date i      { font-size: 12px; }
+
+
+/* NavBar */
+.seedbank_top_nav {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
-/* =========================
-   Info Grid
-========================= */
-
-.grid-info {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
-
-.info-box {
-    background: #f9fafb;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    transition: 0.15s ease;
-}
-
-.info-box:hover {
-    border-color: #d1fae5;
-    background: #f0fdf4;
-}
-
-.info-label {
-    font-size: 0.75rem;
-    color: #6b7280;
-}
-
-.info-value {
-    font-weight: 600;
-    margin-top: 3px;
-    font-size: 0.95rem;
-}
-
-/* =========================
-   Empty State
-========================= */
-
-.empty-state {
-    text-align: center;
-    color: #6b7280;
-    padding: 70px 20px;
-}
-
-.empty-state h3 {
-    margin-bottom: 6px;
-    color: #374151;
-}
-
-/* =========================
-   Withdraw Section
-========================= */
-
-.withdraw-section {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #e5e7eb;
-}
-
-/* =========================
-   Inputs & Buttons
-========================= */
-
-input[type="number"],
-.withdraw-input {
-    width: 100%;
-    padding: 10px;
+.seedbank_nav_link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
     border-radius: 8px;
-    border: 1px solid #d1d5db;
-    font-size: 0.9rem;
-    outline: none;
-    transition: 0.15s ease;
+    text-decoration: none;
+    background: #f4f4f4;
+    color: #333;
+    font-weight: 500;
+    transition: 0.2s ease;
 }
 
-input[type="number"]:focus,
-.withdraw-input:focus {
-    border-color: #22c55e;
-    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+.seedbank_nav_link:hover {
+    background: #e8e8e8;
 }
 
-/* Main button */
-button,
-.withdraw-btn {
-    width: 100%;
-    background: #16a34a;
+.seedbank_nav_link.active {
+    background: #2e7d32;
     color: white;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
 }
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════ */
 
-button:hover,
-.withdraw-btn:hover {
-    background: #15803d;
-    transform: translateY(-1px);
-}
-
-/* Disabled state */
-button:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* =========================
-   Utilities
-========================= */
-
-.text-muted {
-    color: #9ca3af;
-    font-size: 0.8rem;
-}
-
-.space-y-3 > * + * {
-    margin-top: 12px;
+@media (max-width: 640px) {
+    .seedbank_browse             { grid-template-columns: 1fr; }
+    .seedbank_browse_sidebar     { max-height: 240px; }
+    .seedbank_profile_top        { grid-template-columns: 1fr; }
+    .seedbank_detail_stats       { grid-template-columns: 1fr 1fr; }
+    .seedbank_field_grid         { grid-template-columns: 1fr; }
+    .seedbank_destination_group  { grid-template-columns: 1fr; }
 }

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Penalty;
-use App\Models\RentalApplication;
 use App\Models\RentalParticipant;
 use App\Models\Wallet;
 

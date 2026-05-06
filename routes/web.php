@@ -137,7 +137,7 @@ Route::prefix('seedbank')->name('seedbank.')->group(function () {
         ->name('browse');
 
     Route::get('deposit', [SeedBankController::class, 'depositForm'])
-        ->name('deposit.form');
+        ->name('deposit');
 
     Route::post('deposit', [SeedBankController::class, 'store'])
         ->name('deposit.store');

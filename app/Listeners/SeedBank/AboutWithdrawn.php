@@ -10,7 +10,7 @@ class AboutWithdrawn
 {
     public function handle(SeedWithdrawn $event): void
     {
-        Log::info("Removed All SeedBatches that has quantity of 0");
+        Log::info("Removed All SeedBatches that has quantity of 0 from the database (database cleanup)");
 
         SeedBatch::where('owner_type', 'market')
             ->where('quantity', 0)

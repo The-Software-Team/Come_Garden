@@ -8,11 +8,11 @@ interface SeedBankServiceInterface
 {
     public function deposit(array $data): ServiceResult;
 
-    public function withdraw(array $data): array;
+    public function withdraw(array $data): ServiceResult;
 
-    public function addInventoryItem(array $data): void;
+    public function addInventoryItem(array $data): ServiceResult;
 
-    public function checkSeedHealth(): array;
+    public function checkSeedHealth(): ServiceResult;
 
-    public function checkInventoryAlerts(): array;
+    public function checkInventoryAlerts(): ServiceResult;
 }

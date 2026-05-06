@@ -16,14 +16,15 @@ class SeedBankController extends Controller
     ) {}
     
     public function profile() {
-        // the seeds and credits of the member.
-        $seeds = SeedBatch::where('owner_type', 'inventory')->where('owner_id', auth()->user()->id)->get();
 
-        $seedbank_wallet = Wallet::get()->where('member_id',auth()->user()->id)
+        $member = auth()->user();
+
+        $seedbank_wallet = Wallet::get()->where('member_id', $member->id)
             ->where('type', 'seedbank')
             ->first();
 
         $seedbank_credits = $seedbank_wallet->balance;
+        $seeds = SeedBatch::where('owner_type', 'inventory')->where('owner_id', $member->id)->get();
 
         return view('seedbank.index', ['seeds' => $seeds, 'credits' => $seedbank_credits]);
     }
@@ -31,23 +32,15 @@ class SeedBankController extends Controller
     public function market()
     {
         $batches = SeedBatch::get()->where('owner_type', 'market');
-    
         $seeds = $batches->groupBy('seed_type')->map(function ($group) {
             return [
                 'seed_type' => $group->first()->seed_type,
-
                 'quantity' => $group->sum('quantity'),
-    
                 'viability' => round($group->avg('viability'), 1),
-    
-                'origin' => $group->pluck('origin')->unique()->values(),
-    
                 'age' => round($group->avg('age'), 1),
-        
+                'origin' => $group->pluck('origin')->unique()->values(),
                 'created_at' => $group->min('created_at'),
                 'updated_at' => $group->max('updated_at'),
-    
-                // future: merge files
                 'resources' => $group->pluck('resources')->flatten()->filter()->values(),
             ];
         })->values();
@@ -65,7 +58,7 @@ class SeedBankController extends Controller
         
         $result = $this->service->deposit($data);
         if(!$result->success)
-            return redirect()->back()->with('message', $result->message);
+            return redirect()->back()->with('error', $result->message);
 
         return redirect()->back()->with('message', $result->message);
     }
@@ -74,7 +67,11 @@ class SeedBankController extends Controller
         $data = $request->validated();
         $data['member_id'] = auth()->user()->id;
 
-        $this->service->withdraw($data);
-        return redirect()->back()->with('message', "Seed Withdrawn Successfully");
+        $result = $this->service->withdraw($data);
+        // dd($result); 
+        if(!$result->success)
+            return redirect()->back()->with('error', $result->message);
+
+        return redirect()->back()->with('message', $result->message);
     }
 }
