@@ -7,6 +7,7 @@ use App\Models\Plot\Plot;
 
 use App\Http\Requests\Plot\PlantCropRequest;
 use App\Http\Requests\Plot\ReportInfectionRequest;
+use App\Http\Requests\Plot\AddFertilizerRequest;
 
 use App\Contracts\Plot\PlotServiceInterface;
 
@@ -16,7 +17,7 @@ class PlotController extends Controller
         private PlotServiceInterface $service
     ) {}
 
-    public function index()
+    public function admin_index()
     {
         $plots = Plot::with([
             'rentals',
@@ -31,6 +32,13 @@ class PlotController extends Controller
         return view('admin.plots.index', compact('plots'));
     }
 
+    public function market()
+    {
+        $plots = Plot::withCount('neighbors')->where('status', 'available')->get();
+
+        return view('plots.market', compact('plots'));
+    }
+
     public function show(Plot $plot)
     {
         $plot->load([
@@ -41,17 +49,8 @@ class PlotController extends Controller
         return view('plots.show', compact('plot'));
     }
 
-    public function market()
-    {
-        $plots = Plot::where('status', 'available')->get();
-    
-        return view('plots.market', compact('plots'));
-    }
-
     public function ownerView(Plot $plot)
     {
-        // $this->authorize('view', $plot);
-    
         $plot->load([
             'crops.user',
             'infections',
@@ -63,47 +62,40 @@ class PlotController extends Controller
 
 
     public function plant(PlantCropRequest $request, Plot $plot) {
-        try {
-            $this->service->plantCrop(
-                $plot,
-                auth()->user(),
-                $request->type
-            );
 
-            return back()->with('message', 'Crop planted successfully 🌱');
+            $result = $this->service->plantCrop($plot, auth()->user(), $request->type);
 
-        } catch (\Exception $e) {
-            return back()->withErrors($e->getMessage());
-        }
+            if (!$result->success)
+                return redirect()->back()->with('error', "Planting failed");
+
+            return redirect()->back()->with('message', 'Crop planted successfully');
     }
 
 
     public function reportInfection(ReportInfectionRequest $request, Plot $plot) {
-        try {
-            $this->service->reportInfection(
-                $plot,
-                $request->type
-            );
-    
-            return back()->with('message', 'Infection reported 🦠');
-    
-            } catch (\Exception $e) {
-                return back()->withErrors($e->getMessage());
-            }
+
+            $result = $this->service->reportInfection($plot, $request->type);
+            
+            if (!$result->success)
+                return redirect()->back()->with('error', 'Reporting failed');
+
+            return back()->with('message', 'Infection reported');
     }
 
-    public function wateringSchedule(Plot $plot) {
 
+ 
+    public function fertilize(AddFertilizerRequest $request, Plot $plot)
+    {
+        $result = $this->service->addFertilizer(
+            $plot,
+            auth()->user(),
+            $request->fertilizer_type
+        );
+
+        if (!$result->success)
+            return redirect()->back()->with('error', $result->message);
+
+        return redirect()->back()->with('message', $result->message);
     }
 
 }
-
-
-
-    // public function map()
-    // {
-    //     $plots = Plot::get();
-
-    //     return view('plots.map', compact('plots'));
-    // }
-

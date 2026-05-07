@@ -143,7 +143,7 @@ Route::middleware('admin')->prefix('admin')->group(function () {
         ->name('admin.volunteer.shift.create');
   
 
-    Route::get('plots', [PlotController::class, 'index']);
+    Route::get('plots', [PlotController::class, 'admin_index']);
     Route::post('rentals', [RentalController::class, 'rent_plot']);
     
 });
@@ -215,9 +215,8 @@ Route::prefix('plots/{plot}')->group(function () {
     Route::post('/infection', [PlotController::class, 'reportInfection'])
         ->name('plots.reportInfection');
 
-    Route::get('/watering', [PlotController::class, 'wateringSchedule'])
-        ->name('plots.watering');
-
+    Route::post('/fertilize', [PlotController::class, 'fertilize'])
+        ->name('plots.fertilize');
 });
 
 #

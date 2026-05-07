@@ -6,24 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('plot_neighbors', function (Blueprint $table) {
-            $table->foreignId('plot_id')->constrained('plots')->onDelete('cascade');
-            $table->foreignId('neighbor_id')->constrained('plots')->onDelete('cascade');
-    
-            $table->primary(['plot_id', 'neighbor_id']);
-    
-            $table->index('plot_id');
+            $table->id();
+
+            $table->foreignId('plot_id')
+                ->constrained('plots')
+                ->cascadeOnDelete();
+
+            $table->foreignId('neighbor_plot_id')
+                ->constrained('plots')
+                ->cascadeOnDelete();
+
+            // Direction makes queries like "who is above me?" efficient
+            $table->enum('direction', ['north', 'south', 'east', 'west']);
+
+            $table->timestamps();
+
+            // Each directional pair is unique; both directions are stored explicitly
+            // so queries from either side are a simple WHERE plot_id = ?
+            $table->unique(['plot_id', 'neighbor_plot_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('plot_neighbors');
