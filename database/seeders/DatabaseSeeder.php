@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             SeasonSeeder::class,
             SeedBatchSeeder::class,
             InventoryItemSeeder::class,
+/*             ToolSeeder::class, */
         ]);
     }
 }

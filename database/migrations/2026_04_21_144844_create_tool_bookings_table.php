@@ -21,11 +21,15 @@ return new class extends Migration
             $table->dateTime('end_time');
             $table->dateTime('actual_return_time')->nullable();
 
-            $table->string('status')->default('active');
-            // active, completed, overdue, cancelled
+            $table->enum('status', [
+                'active',
+                'completed',
+                'cancelled',
+                'overdue'
+            ])->default('active');
 
             $table->boolean('cleaned')->default(true);
-
+            
             $table->timestamps();
 
             $table->index(['tool_id', 'status']);

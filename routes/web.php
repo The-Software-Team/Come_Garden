@@ -91,6 +91,7 @@ use App\Http\Controllers\MemberSeedBankController;
 
 #########################################################################
 use App\Http\Controllers\AdminController;
+use App\Models\ToolLibrary\Tool;
 
 Route::middleware(['auth'])->group(function () {
 
@@ -152,8 +153,8 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/seedbank', [AdminController::class, 'admin_seedbank']);
     Route::post('/seedbank', [AdminController::class, 'admin_seedbank_store'])->name("admin_seedbank.store");
 
-    Route::get('tools', [AdminController::class, 'admin_tool'])->name('admin.tools');
-    Route::post('tools', [AdminController::class, 'admin_tool_store'])->name('admin.tools.store');
+    Route::get('tools', [ToolController::class, 'admin_index'])->name('admin.tools');
+    Route::post('tools', [ToolController::class, 'store'])->name('tools.store');
 
     Route::get('/volunteer' , [VolunteerController::class, 'adminIndex'])
         ->name('admin.volunteer');
@@ -165,7 +166,6 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('plots', [PlotController::class, 'index']);
     Route::post('rentals', [RentalController::class, 'rent_plot']);
     
-
 });
 
 ## Tool Library
@@ -175,6 +175,17 @@ Route::prefix('tools')->group(function () {
     Route::post('/book', [ToolController::class, 'book'])->name('tools.book');
     Route::post('/return', [ToolController::class, 'return'])->name('tools.return');
     Route::post('/damage', [ToolController::class, 'reportDamage'])->name('tools.damage');
+
+    Route::post('/maintain', [ToolController::class, 'maintainTool'])->name('tools.maintain');
+
+    Route::get('/scan/{token}', [ToolController::class, 'scan'])
+        ->name('tools.scan');
+
+    Route::post('/scan', [ToolController::class, 'processScan'])
+        ->name('tools.scan.process');
+
+    Route::post('/waitlist/process', [ToolController::class, 'processWaitlist'])
+        ->name('tools.waitlist.process');
 });
 
 ## Volunteer System

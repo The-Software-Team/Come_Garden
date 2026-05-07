@@ -20,9 +20,13 @@ return new class extends Migration
             $table->integer('priority_score')->default(0);
             $table->integer('duration_hours');
     
-            $table->string('status')->default('queued');
-            // queued, processed, cancelled
-        
+            $table->enum('status', [
+                'waiting',
+                'processed',
+                'expired',
+                'cancelled'
+            ])->default('waiting');
+
             $table->timestamps();
         
             $table->index(['tool_id', 'priority_score']);

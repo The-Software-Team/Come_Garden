@@ -16,9 +16,8 @@ return new class extends Migration
             
             $table->string('name')->unique();
         
-            $table->string('status')->default('available');
-            // available, unavailable, maintenance, decommissioned
-    
+            $table->enum('status', ['available', 'in_use', 'maintenance']);
+
             $table->string('usage_status')->default('low');
     
             $table->integer('total_usage_hours')->default(0);
@@ -37,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tool');
+        Schema::dropIfExists('tools');
     }
 };

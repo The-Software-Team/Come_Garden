@@ -1,20 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
-
-use Illuminate\Foundation\Http\FormRequest;
-
-namespace App\Http\Requests;
+namespace App\Http\Requests\ToolLibrary;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreToolRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return auth()->check(); // or role check if needed
-    }
-
     public function rules(): array
     {
         return [

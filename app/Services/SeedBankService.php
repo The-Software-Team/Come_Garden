@@ -111,7 +111,7 @@ class SeedBankService extends BaseService implements SeedBankServiceInterface
                 $taken,
                 'seed_withdraw'
             );
-            event(new SeedWithdrawn($member->id, $taken));
+            event(new SeedWithdrawn($taken));
 
             return ServiceResult::success([
                 'taken' => $result,

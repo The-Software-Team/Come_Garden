@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ToolLibrary;
 
 use App\Models\Member;
-use App\Models\Tool;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
     protected $fillable = [
         'tool_id',
         'member_id',
@@ -16,6 +18,10 @@ class Booking extends Model
         'end_time',
         'actual_return_time',
         'status',
+        'qr_token',
+        'picked_up_at',
+        'returned_scanned_at',
+        'cleaned_at'
     ];
 
     protected $casts = [
