@@ -253,6 +253,10 @@ class ToolLibraryService extends BaseService implements ToolLibraryServiceInterf
 
                 $start = now();
                 $end = now()->addHours($entry->duration_hours);
+                
+                if (!$this->isToolAvailable($tool, $start, $end)) {
+                    continue;
+                }
 
                 // create booking
                 $booking = Booking::create([

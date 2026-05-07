@@ -109,27 +109,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-## Plot
-Route::get('/plots', [PlotController::class, 'market']);
-Route::get('/plots/{plot}', [PlotController::class, 'show'])->name('plots.show');
-Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
-
-
-Route::prefix('plots/{plot}')->group(function () {
-
-    Route::post('/plant', [PlotController::class, 'plant'])
-        ->name('plots.plant');
-
-    Route::post('/infection', [PlotController::class, 'reportInfection'])
-        ->name('plots.infection');
-
-    Route::get('/watering', [PlotController::class, 'wateringSchedule'])
-        ->name('plots.watering');
-
-});
-
-## SeedBank
+# SeedBank
 Route::prefix('seedbank')->name('seedbank.')->group(function () {
     Route::get('/', [SeedBankController::class, 'profile'])
         ->name('profile');
@@ -221,6 +201,26 @@ Route::prefix('marketplace')->group(function () {
 
 });
 
+## Plot
+Route::get('/plots', [PlotController::class, 'market']);
+Route::get('/plots/{plot}', [PlotController::class, 'show'])->name('plots.show');
+Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
+
+
+Route::prefix('plots/{plot}')->group(function () {
+
+    Route::post('/plant', [PlotController::class, 'plant'])
+        ->name('plots.plant');
+
+    Route::post('/infection', [PlotController::class, 'reportInfection'])
+        ->name('plots.reportInfection');
+
+    Route::get('/watering', [PlotController::class, 'wateringSchedule'])
+        ->name('plots.watering');
+
+});
+
+#
 
 ## Rentals
 Route::prefix('rental')->group(function () {
