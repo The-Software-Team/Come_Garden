@@ -89,26 +89,26 @@ use App\Http\Controllers\MemberSeedBankController;
 
 
 
-#########################################################################
 use App\Http\Controllers\AdminController;
-use App\Models\ToolLibrary\Tool;
-
-Route::middleware(['auth'])->group(function () {
-
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'member'])->name('dashboard.member');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 # SeedBank
 Route::prefix('seedbank')->name('seedbank.')->group(function () {
     Route::get('/', [SeedBankController::class, 'profile'])
@@ -130,8 +130,11 @@ Route::prefix('seedbank')->name('seedbank.')->group(function () {
 
 ## Admin
 Route::middleware('admin')->prefix('admin')->group(function () {
+    Route::get('/', [DashboardController::class, 'admin'])->name('dashboard.admin');
+    
     Route::get('/seedbank', [AdminController::class, 'admin_seedbank']);
     Route::post('/seedbank', [AdminController::class, 'admin_seedbank_store'])->name("admin_seedbank.store");
+
 
     Route::get('tools', [ToolController::class, 'admin_index'])->name('admin.tools');
     Route::post('tools', [ToolController::class, 'store'])->name('tools.store');
@@ -218,8 +221,8 @@ Route::prefix('marketplace')->name('marketplace.')->group(function () {
 
 ## Plot
 Route::get('/plots', [PlotController::class, 'market']);
-Route::get('/plots/{plot}', [PlotController::class, 'show'])->name('plots.show');
-Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
+Route::get('/plots/{plot}', [PlotController::class, 'ownerView'])->name('plots.show');
+// Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
 
 
 Route::prefix('plots/{plot}')->group(function () {

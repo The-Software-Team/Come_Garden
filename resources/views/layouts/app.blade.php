@@ -36,8 +36,6 @@
 
     </div>
 @endif
-    <!-- @include('partials.navbar') -->
-
 
     <div class="container">
         @yield('content')
