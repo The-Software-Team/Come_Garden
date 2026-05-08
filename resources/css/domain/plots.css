@@ -1,179 +1,825 @@
-/* =========================
-   GARDEN CONTROL CENTER UI
-   ========================= */
-
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  PLOTS.CSS                                               ║
+   ║  Scoped styles for the Plot & Rental module              ║
+   ║  All classes prefixed  plot_                             ║
+   ╚══════════════════════════════════════════════════════════╝ */
+ 
+ 
+/* ── Tokens ─────────────────────────────────────────────── */
 :root {
-    --green: #2f7d32;
-    --green-light: #e9f7ec;
-    --danger: #c0392b;
-    --gray: #6b7280;
-    --panel: #ffffff;
-    --border: #e5e7eb;
-    --bg: #f9fafb;
+    --plot_earth:        #3d2b1f;
+    --plot_bark:         #6b4226;
+    --plot_moss:         #4a7c3f;
+    --plot_moss_mid:     #6a9e5e;
+    --plot_moss_light:   #e4eed9;
+    --plot_moss_bg:      #f2f7ec;
+    --plot_sun:          #c8860a;
+    --plot_sun_bg:       #fdf3e0;
+    --plot_sun_text:     #7a4e05;
+    --plot_sky:          #2668a8;
+    --plot_sky_bg:       #e8f1fb;
+    --plot_sky_text:     #14406e;
+    --plot_red_bg:       #fceaea;
+    --plot_red_text:     #7a1f1f;
+    --plot_focus:        rgba(74, 124, 63, 0.14);
+    --plot_border:       rgba(74, 124, 63, 0.18);
 }
-
-/* =========================
-   HEADER
-   ========================= */
-
-h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+ 
+ 
+/* ══════════════════════════════════════════════════════════
+   SHARED
+   ══════════════════════════════════════════════════════════ */
+ 
+.plot_section_label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin: 0 0 10px;
+    display: block;
 }
-
-/* =========================
-   SELECT DROPDOWN (UNIFIED)
-   ========================= */
-
-.plot-select-btn {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: white;
-    cursor: pointer;
-    font-size: 14px;
-    text-align: left;
-    transition: 0.2s;
-}
-
-.plot-select-btn:hover {
-    background: var(--bg);
-}
-
-/* dropdown container */
-.plot-menu {
-    margin-top: 8px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    max-height: 250px;
-    overflow-y: auto;
-}
-
-/* dropdown item */
-.plot-menu-item {
-    padding: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    border-bottom: 1px solid #f1f1f1;
-    transition: 0.15s;
-}
-
-.plot-menu-item:hover {
-    background: var(--green-light);
-}
-
-.plot-menu-item:last-child {
-    border-bottom: none;
-}
-
-/* hidden utility */
-.hidden {
-    display: none;
-}
-
-/* =========================
-   PANEL
-   ========================= */
-
-.panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    min-height: 500px;
-}
-
-/* =========================
-   DETAILS HEADER
-   ========================= */
-
-.details-header {
+ 
+.plot_alert {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 18px;
+    border: 0.5px solid;
+    font-size: 14px;
 }
-
-/* =========================
-   BADGE
-   ========================= */
-
-.badge {
-    background: var(--green-light);
-    color: var(--green);
+.plot_alert--success { background: var(--color-background-success); color: var(--color-text-success); border-color: var(--color-border-success); }
+.plot_alert--warning { background: var(--color-background-warning); color: var(--color-text-warning); border-color: var(--color-border-warning); }
+ 
+/* Badges */
+.plot_badge {
     padding: 4px 10px;
     border-radius: 999px;
-    font-size: 12px;
-}
-
-/* =========================
-   INFO GRID
-   ========================= */
-
-.grid-info {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.info-box {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px;
-}
-
-.info-label {
     font-size: 11px;
-    color: var(--gray);
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
-
-.info-value {
+.plot_badge--premium  { background: var(--plot_sun_bg);   color: var(--plot_sun_text); }
+.plot_badge--standard { background: var(--plot_moss_light); color: #2a5020; }
+.plot_badge--available{ background: var(--plot_moss_light); color: #2a5020; }
+.plot_badge--rented   { background: var(--plot_sky_bg);   color: var(--plot_sky_text); }
+.plot_badge--inactive { background: var(--color-background-secondary); color: var(--color-text-tertiary); }
+.plot_badge--infected { background: var(--plot_red_bg);   color: var(--plot_red_text); }
+ 
+/* Inputs */
+.plot_input {
+    height: 40px;
+    padding: 0 12px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
     font-size: 14px;
-    font-weight: 600;
-}
-
-/* =========================
-   SECTION
-   ========================= */
-
-.section {
-    margin-top: 20px;
-}
-
-/* =========================
-   BUTTONS
-   ========================= */
-
-.btn-primary {
-    background: var(--green);
-    color: white;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 8px;
-    cursor: pointer;
+    font-family: var(--font-sans);
     width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
-
-.btn-primary:hover {
-    opacity: 0.9;
-}
-
-/* =========================
-   EMPTY STATE
-   ========================= */
-
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    color: var(--gray);
-}
-
-.muted {
-    color: var(--gray);
+.plot_input:focus { border-color: var(--plot_moss); box-shadow: 0 0 0 3px var(--plot_focus); }
+.plot_input::placeholder { color: var(--color-text-tertiary); }
+.plot_textarea { height: auto; padding: 10px 12px; resize: vertical; }
+.plot_select   { appearance: none; cursor: pointer; }
+ 
+/* Labels */
+.plot_label {
     font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+.plot_label span { color: var(--color-text-danger); margin-left: 2px; }
+ 
+/* Fields */
+.plot_field { display: flex; flex-direction: column; gap: 5px; }
+ 
+/* Submit / cancel */
+.plot_submit_btn {
+    height: 42px;
+    padding: 0 22px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    background: var(--plot_moss);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s;
+}
+.plot_submit_btn:hover { background: var(--plot_moss_mid); }
+ 
+.plot_cancel_btn {
+    height: 42px;
+    padding: 0 18px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+.plot_cancel_btn:hover { background: var(--color-background-secondary); }
+ 
+ 
+/* ══════════════════════════════════════════════════════════
+   MARKET PAGE  ·  plots/market.blade.php
+   ══════════════════════════════════════════════════════════ */
+ 
+.plot_market {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 16px;
+    min-height: 560px;
+}
+ 
+ 
+/* ── Sidebar ─────────────────────────────────────────── */
+ 
+.plot_sidebar {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+ 
+.plot_sidebar_header {
+    padding: 14px 16px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+ 
+/* Search */
+.plot_search_wrap   { position: relative; }
+.plot_search_wrap i { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-text-tertiary); pointer-events: none; }
+.plot_search {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px 0 32px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+    font-size: 13px;
+    color: var(--color-text-primary);
+    box-sizing: border-box;
+    outline: none;
+}
+.plot_search:focus { border-color: var(--plot_moss); box-shadow: 0 0 0 3px var(--plot_focus); }
+ 
+/* Filter pills */
+.plot_filter_row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.plot_filter_btn {
+    height: 26px;
+    padding: 0 10px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 999px;
+    background: transparent;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.plot_filter_btn:hover { background: var(--plot_moss_light); border-color: var(--plot_moss); color: var(--plot_moss); }
+.plot_filter_btn.active { background: var(--plot_moss); border-color: var(--plot_moss); color: #fff; }
+ 
+/* List */
+.plot_list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+ 
+.plot_list_item {
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    cursor: pointer;
+    transition: background 0.1s;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.plot_list_item:last-child { border-bottom: none; }
+.plot_list_item:hover  { background: var(--color-background-secondary); }
+.plot_list_item.active { background: var(--plot_moss_bg); border-left: 2px solid var(--plot_moss); padding-left: 14px; }
+ 
+.plot_list_item_main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.plot_list_item_name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+.plot_list_item_zone {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.plot_list_item_zone i { font-size: 11px; }
+ 
+.plot_list_item_meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.plot_list_item_size {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+}
+ 
+.plot_list_empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.plot_list_empty i { font-size: 26px; color: var(--color-text-tertiary); }
+ 
+ 
+/* ── Detail panel ────────────────────────────────────── */
+ 
+.plot_panel {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+ 
+.plot_panel_empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 3rem;
+    text-align: center;
+}
+.plot_panel_empty_icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--plot_moss_light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.plot_panel_empty_icon i { font-size: 24px; color: var(--plot_moss); }
+.plot_panel_empty h2 { font-size: 16px; font-weight: 500; margin: 0; }
+.plot_panel_empty p  { font-size: 13px; color: var(--color-text-secondary); margin: 0; max-width: 220px; line-height: 1.5; }
+ 
+.plot_panel_detail {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+ 
+.plot_detail_header {
+    padding: 18px 22px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.plot_detail_title {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0;
+    color: var(--color-text-primary);
+}
+ 
+/* Stats grid */
+.plot_detail_stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.plot_stat {
+    padding: 14px 18px;
+    border-right: 0.5px solid var(--color-border-tertiary);
+}
+.plot_stat:last-child { border-right: none; }
+.plot_stat_label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    display: block;
+    margin-bottom: 5px;
+}
+.plot_stat_value {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+}
+.plot_stat_value--sm { font-size: 14px; align-items: center; }
+.plot_stat_unit { font-size: 12px; color: var(--color-text-secondary); font-weight: 400; }
+ 
+/* Sunlight bar */
+.plot_detail_sunlight {
+    padding: 14px 22px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.plot_sun_track {
+    height: 6px;
+    background: var(--color-border-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+.plot_sun_fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--plot_moss) 0%, var(--plot_sun) 100%);
+    transition: width 0.4s ease;
+}
+.plot_sun_labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+}
+ 
+/* Meta row */
+.plot_detail_meta {
+    padding: 12px 22px;
+    display: flex;
+    gap: 22px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.plot_meta_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+.plot_meta_item i { font-size: 14px; color: var(--color-text-tertiary); }
+ 
+/* Notes */
+.plot_detail_notes {
+    padding: 14px 22px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.plot_notes_text {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+ 
+/* CTA */
+.plot_detail_cta {
+    padding: 18px 22px;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--color-background-secondary);
+    border-top: 0.5px solid var(--color-border-tertiary);
+}
+.plot_apply_btn {
+    height: 44px;
+    padding: 0 28px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    background: var(--plot_moss);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s;
+}
+.plot_apply_btn:hover { background: var(--plot_moss_mid); }
+.plot_cta_hint {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+ 
+ 
+/* ══════════════════════════════════════════════════════════
+   APPLY MODAL
+   ══════════════════════════════════════════════════════════ */
+ 
+.plot_modal_backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 1rem;
+}
+ 
+.plot_modal {
+    width: 460px;
+    max-width: 100%;
+    background: var(--color-background-primary);
+    border-radius: var(--border-radius-lg);
+    border: 0.5px solid var(--color-border-tertiary);
+    overflow: hidden;
+    animation: plot_modal_in 0.18s ease;
+}
+ 
+@keyframes plot_modal_in {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+}
+ 
+.plot_modal_header {
+    padding: 18px 20px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.plot_modal_title {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0;
+}
+.plot_modal_close {
+    width: 34px;
+    height: 34px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: background 0.12s;
+}
+.plot_modal_close:hover { background: var(--color-background-secondary); }
+ 
+.plot_modal_form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+ 
+/* Radio cards */
+.plot_radio_group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.plot_radio_option { position: relative; cursor: pointer; }
+.plot_radio_option input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+.plot_radio_card {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    transition: border-color 0.15s, background 0.15s;
+}
+.plot_radio_option input:checked + .plot_radio_card {
+    border-color: var(--plot_moss);
+    background: var(--plot_moss_bg);
+    color: var(--plot_moss);
+}
+.plot_radio_card i { font-size: 16px; }
+ 
+.plot_modal_footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 4px;
+}
+ 
+ 
+/* ══════════════════════════════════════════════════════════
+   OWNER PAGE  ·  plots/owner.blade.php
+   ══════════════════════════════════════════════════════════ */
+ 
+.plot_owner_layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
+    align-items: start;
+}
+ 
+.plot_owner_main { display: flex; flex-direction: column; gap: 16px; }
+.plot_owner_side { display: flex; flex-direction: column; gap: 16px; }
+ 
+/* Card shell */
+.plot_card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+.plot_card_header {
+    padding: 16px 20px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.plot_card_title {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+}
+.plot_card_body { padding: 18px 20px; }
+ 
+/* Crop grid */
+.plot_crop_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+}
+.plot_crop_card {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 12px;
+    background: var(--color-background-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.plot_crop_name  { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.plot_crop_meta  { font-size: 11px; color: var(--color-text-tertiary); }
+.plot_crop_empty { font-size: 13px; color: var(--color-text-secondary); padding: 8px 0; }
+ 
+/* Infection list */
+.plot_infection_list { display: flex; flex-direction: column; gap: 10px; }
+.plot_infection_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+}
+.plot_infection_name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.plot_infection_date { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+.plot_infection_empty { font-size: 13px; color: var(--color-text-secondary); padding: 8px 0; }
+ 
+/* Watering schedule */
+.plot_water_list { display: flex; flex-direction: column; gap: 8px; }
+.plot_water_item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary);
+}
+.plot_water_icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--plot_sky_bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.plot_water_icon i { font-size: 15px; color: var(--plot_sky); }
+.plot_water_crop   { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.plot_water_time   { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+.plot_water_empty  { font-size: 13px; color: var(--color-text-secondary); padding: 8px 0; }
+ 
+/* Neighbor alert list */
+.plot_neighbor_list { display: flex; flex-direction: column; gap: 8px; }
+.plot_neighbor_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border: 0.5px solid var(--plot_border);
+    border-radius: var(--border-radius-md);
+    background: var(--plot_moss_bg);
+    font-size: 13px;
+}
+ 
+/* Action forms */
+.plot_action_form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.plot_action_form .plot_input { flex: 1; }
+ 
+/* Winter tasks */
+.plot_task_list { display: flex; flex-direction: column; gap: 6px; }
+.plot_task_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    font-size: 13px;
+    color: var(--color-text-primary);
+    background: var(--color-background-secondary);
+}
+.plot_task_item i { color: var(--plot_moss); font-size: 15px; flex-shrink: 0; }
+ 
+ 
+/* ══════════════════════════════════════════════════════════
+   ADMIN PAGE  ·  admin/plots/index.blade.php
+   ══════════════════════════════════════════════════════════ */
+ 
+.plot_admin_layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+ 
+/* Stats bar */
+.plot_admin_stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+.plot_admin_stat {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 16px 20px;
+}
+.plot_admin_stat_label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    display: block;
+    margin-bottom: 6px;
+}
+.plot_admin_stat_value {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    line-height: 1;
+}
+.plot_admin_stat_sub {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+    display: block;
+}
+ 
+/* Admin body grid */
+.plot_admin_body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 16px;
+    align-items: start;
+}
+ 
+/* Plot table */
+.plot_table_wrap { overflow-x: auto; }
+.plot_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.plot_table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    white-space: nowrap;
+}
+.plot_table tbody td {
+    padding: 12px 14px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+.plot_table tbody tr:last-child td { border-bottom: none; }
+.plot_table tbody tr:hover { background: var(--color-background-secondary); }
+ 
+.plot_table_name   { font-weight: 500; }
+.plot_table_sub    { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+.plot_table_actions { display: flex; gap: 8px; }
+ 
+/* Action buttons */
+.plot_btn {
+    height: 34px;
+    padding: 0 14px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s;
+    white-space: nowrap;
+}
+.plot_btn--primary { background: var(--plot_moss); color: #fff; }
+.plot_btn--primary:hover { background: var(--plot_moss_mid); }
+.plot_btn--ghost   { background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-secondary); }
+.plot_btn--ghost:hover { background: var(--color-border-tertiary); }
+.plot_btn--danger  { background: var(--plot_red_bg); color: var(--plot_red_text); }
+.plot_btn--danger:hover { background: #f5d8d8; }
+.plot_btn--warn    { background: var(--plot_sun_bg); color: var(--plot_sun_text); }
+.plot_btn--warn:hover { background: #fce8bb; }
+ 
+/* Applications panel */
+.plot_app_list { display: flex; flex-direction: column; gap: 10px; }
+.plot_app_card {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 14px;
+    background: var(--color-background-secondary);
+}
+.plot_app_header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.plot_app_name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.plot_app_meta { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+.plot_app_actions { display: flex; gap: 8px; }
+ 
+/* Run allocation */
+.plot_allocation_card {
+    background: var(--plot_moss_bg);
+    border: 0.5px solid var(--plot_border);
+    border-radius: var(--border-radius-lg);
+    padding: 20px;
+}
+.plot_allocation_title { font-family: var(--font-serif); font-size: 17px; font-weight: 500; margin: 0 0 6px; }
+.plot_allocation_desc  { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 16px; line-height: 1.5; }
+ 
+/* Empty states */
+.plot_table_empty {
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+}
+ 
+ 
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════ */
+ 
+@media (max-width: 860px) {
+    .plot_market        { grid-template-columns: 1fr; }
+    .plot_owner_layout  { grid-template-columns: 1fr; }
+    .plot_admin_body    { grid-template-columns: 1fr; }
+    .plot_admin_stats   { grid-template-columns: repeat(2, 1fr); }
+    .plot_detail_stats  { grid-template-columns: repeat(2, 1fr); }
+}
+ 
+@media (max-width: 540px) {
+    .plot_admin_stats   { grid-template-columns: 1fr; }
+    .plot_radio_group   { grid-template-columns: 1fr; }
 }

@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ToolLibrary;
 
 use App\Models\Member;
-use App\Models\Tool;
 
 use Illuminate\Database\Eloquent\Model;
 
 class ToolWaitlist extends Model
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
     protected $fillable = [
         'tool_id',
         'member_id',
-        'priority',
-        'duration',
+        'priority_score',
+        'duration_hours',
+        'status'
     ];
 
     public function tool()

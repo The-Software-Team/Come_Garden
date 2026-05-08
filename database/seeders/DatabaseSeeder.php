@@ -13,10 +13,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             MemberSeeder::class,
-            PlotSeeder::class,
+            // PlotSeeder::class,
             SeasonSeeder::class,
             SeedBatchSeeder::class,
             InventoryItemSeeder::class,
+/*             ToolSeeder::class, */
         ]);
     }
 }

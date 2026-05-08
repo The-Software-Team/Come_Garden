@@ -1,18 +1,21 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ToolLibrary;
 
-use App\Models\Booking;
-use App\Models\ToolWaitlist;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Tool extends Model
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+
     protected $fillable = [
         'name',
+        'status',
         'usage_status',
+        'total_usage_hours',
         'maintenance_threshold_hours',
+        'is_active'
     ];
 
     public function bookings()

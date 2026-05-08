@@ -1,5 +1,6 @@
 <?php
-namespace App\Http\Requests;
+
+namespace App\Http\Requests\ToolLibrary;
 use Illuminate\Foundation\Http\FormRequest;
 
 
@@ -9,7 +10,7 @@ class BookToolRequest extends FormRequest
     {
         return [
             'tool_name'   => 'required|string',
-            'duration_hours'     => 'required|integer|min:1'
+            'duration_hours'     => 'required'
         ];
     }
 }

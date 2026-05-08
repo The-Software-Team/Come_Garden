@@ -91,6 +91,7 @@ use App\Http\Controllers\MemberSeedBankController;
 
 #########################################################################
 use App\Http\Controllers\AdminController;
+use App\Models\ToolLibrary\Tool;
 
 Route::middleware(['auth'])->group(function () {
 
@@ -108,27 +109,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-## Plot
-Route::get('/plots', [PlotController::class, 'market']);
-Route::get('/plots/{plot}', [PlotController::class, 'show'])->name('plots.show');
-Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
-
-
-Route::prefix('plots/{plot}')->group(function () {
-
-    Route::post('/plant', [PlotController::class, 'plant'])
-        ->name('plots.plant');
-
-    Route::post('/infection', [PlotController::class, 'reportInfection'])
-        ->name('plots.infection');
-
-    Route::get('/watering', [PlotController::class, 'wateringSchedule'])
-        ->name('plots.watering');
-
-});
-
-## SeedBank
+# SeedBank
 Route::prefix('seedbank')->name('seedbank.')->group(function () {
     Route::get('/', [SeedBankController::class, 'profile'])
         ->name('profile');
@@ -152,8 +133,8 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/seedbank', [AdminController::class, 'admin_seedbank']);
     Route::post('/seedbank', [AdminController::class, 'admin_seedbank_store'])->name("admin_seedbank.store");
 
-    Route::get('tools', [AdminController::class, 'admin_tool'])->name('admin.tools');
-    Route::post('tools', [AdminController::class, 'admin_tool_store'])->name('admin.tools.store');
+    Route::get('tools', [ToolController::class, 'admin_index'])->name('admin.tools');
+    Route::post('tools', [ToolController::class, 'store'])->name('tools.store');
 
     Route::get('/volunteer' , [VolunteerController::class, 'adminIndex'])
         ->name('admin.volunteer');
@@ -170,11 +151,11 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/volunteer/proposals', [VolunteerController::class, 'fundProposals'])
         ->name('admin.volunteer.proposals');
   
+    Route::get('/market', [MarketController::class, 'index'])->name('admin.marketplace.index');
 
-    Route::get('plots', [PlotController::class, 'index']);
+    Route::get('plots', [PlotController::class, 'admin_index']);
     Route::post('rentals', [RentalController::class, 'rent_plot']);
     
-
 });
 
 ## Tool Library
@@ -184,6 +165,17 @@ Route::prefix('tools')->group(function () {
     Route::post('/book', [ToolController::class, 'book'])->name('tools.book');
     Route::post('/return', [ToolController::class, 'return'])->name('tools.return');
     Route::post('/damage', [ToolController::class, 'reportDamage'])->name('tools.damage');
+
+    Route::post('/maintain', [ToolController::class, 'maintainTool'])->name('tools.maintain');
+
+    Route::get('/scan/{token}', [ToolController::class, 'scan'])
+        ->name('tools.scan');
+
+    Route::post('/scan', [ToolController::class, 'processScan'])
+        ->name('tools.scan.process');
+
+    Route::post('/waitlist/process', [ToolController::class, 'processWaitlist'])
+        ->name('tools.waitlist.process');
 });
 
 ## Volunteer System
@@ -254,23 +246,56 @@ Route::prefix('volunteer')->group(function () {
 });
 
 
-## Market Place
-Route::prefix('marketplace')->group(function () {
-    Route::get('/', [MarketController::class, 'index'])
-        ->name('marketplace.index');
+//    MARKETPLACE ROUTES
+Route::prefix('marketplace')->name('marketplace.')->group(function () {
 
-    Route::get('/profile', [MarketController::class, 'profile'])->name('marketplace.profile');
+    // Pages
+    Route::get('/market',  [MarketController::class, 'market'])->name('market');
+    Route::get('/profile', [MarketController::class, 'profile'])->name('profile');
 
-    Route::post('/listings', [MarketController::class, 'createListing'])->name('marketplace.listings.store');
-    Route::post('/trades', [MarketController::class, 'createTrade'])->name('marketplace.trades.store');
-    Route::post('/questions', [MarketController::class, 'askQuestion'])->name('marketplace.questions.store');
-    Route::post('/answers', [MarketController::class, 'answerQuestion'])->name('marketplace.answers.store');
+    // Listings
+    Route::post('/listings', [MarketController::class, 'storeListing'])->name('listings.store');
 
-    Route::post('/profile/accept_answer', [MarketController::class, 'acceptAnswer'])->name('marketplace.answer.accept');
-    Route::post('/profile/accept_trade', [MarketController::class, 'acceptTrade'])->name('marketplace.trade.accept');
+    // Trades
+    Route::post('/trades',       [MarketController::class, 'storeTrade'])->name('trades.store');
+    Route::post('/flash/claim',  [MarketController::class, 'claimFlash'])->name('flash.claim');
 
+    // Q&A
+    Route::post('/questions', [MarketController::class, 'storeQuestion'])->name('questions.store');
+    Route::post('/answers',   [MarketController::class, 'storeAnswer'])->name('answers.store');
+
+    // Quality ratings
+    Route::post('/ratings', [MarketController::class, 'storeRating'])->name('ratings.store');
+
+    // Canning
+    Route::post('/canning',      [MarketController::class, 'storeCanningSession'])->name('canning.store');
+    Route::post('/canning/join', [MarketController::class, 'joinCanningSession'])->name('canning.join');
+
+    // Allergen profile
+    Route::post('/allergens', [MarketController::class, 'updateAllergens'])->name('allergens.update');
 });
 
+
+
+## Plot
+Route::get('/plots', [PlotController::class, 'market']);
+Route::get('/plots/{plot}', [PlotController::class, 'show'])->name('plots.show');
+Route::get('/my-plots/{plot}', [PlotController::class, 'ownerView']);
+
+
+Route::prefix('plots/{plot}')->group(function () {
+
+    Route::post('/plant', [PlotController::class, 'plant'])
+        ->name('plots.plant');
+
+    Route::post('/infection', [PlotController::class, 'reportInfection'])
+        ->name('plots.reportInfection');
+
+    Route::post('/fertilize', [PlotController::class, 'fertilize'])
+        ->name('plots.fertilize');
+});
+
+#
 
 ## Rentals
 Route::prefix('rental')->group(function () {

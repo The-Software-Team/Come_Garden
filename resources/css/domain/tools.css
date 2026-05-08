@@ -1,173 +1,508 @@
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  TOOLS.CSS                                               ║
+   ║  Scoped styles for Tool Management module                ║
+   ║  All classes prefixed tool_                              ║
+   ╚══════════════════════════════════════════════════════════╝ */
 
-/* Page base */
-body {
-    background: #f5f7fb;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    color: #1f2937;
+
+/* ── Tokens ─────────────────────────────────────────────── */
+:root {
+    --tool_green_dark:  #355f1b;
+    --tool_green_mid:   #5f8f30;
+    --tool_green_light: #e8f0dc;
+    --tool_green_bg:    #f2f6eb;
+
+    --tool_blue_bg:     #e7f0fb;
+    --tool_blue_text:   #154a7d;
+
+    --tool_amber_bg:    #faeeda;
+    --tool_amber_text:  #633806;
+
+    --tool_red_bg:      #fcebeb;
+    --tool_red_text:    #7b1f1f;
+
+    --tool_focus: rgba(53, 95, 27, 0.12);
 }
 
-/* Headings */
-h2 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 16px;
+
+/* ══════════════════════════════════════════════════════════
+   LAYOUT
+   ══════════════════════════════════════════════════════════ */
+
+.tool_layout {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 18px;
+    min-height: 650px;
 }
 
-h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
 
-/* Panels (cards) */
-.panel {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid #eef0f3;
-}
+/* ══════════════════════════════════════════════════════════
+   SIDEBAR
+   ══════════════════════════════════════════════════════════ */
 
-/* Input fields */
-.input {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: 0.2s ease;
-    background: #fff;
-}
-
-.input:focus {
-    outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-}
-
-/* Primary button */
-.btn-primary {
-    width: 100%;
-    padding: 10px 12px;
-    background: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.btn-primary:hover {
-    background: #4338ca;
-}
-
-/* Tool list container */
-.tool-list {
+.tool_sidebar {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
 }
 
-/* Tool item */
-.tool-item {
+.tool_sidebar_header {
+    padding: 4px 2px;
+}
+
+.tool_sidebar_title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 500;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   SHARED CARD
+   ══════════════════════════════════════════════════════════ */
+
+.tool_card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.tool_card--grow {
+    flex: 1;
+}
+
+.tool_card_section {
+    padding: 18px;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   LABELS
+   ══════════════════════════════════════════════════════════ */
+
+.tool_section_label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.tool_label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   FORM
+   ══════════════════════════════════════════════════════════ */
+
+.tool_form {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 14px;
-    background: #ffffff;
-    border-radius: 10px;
-    border: 1px solid #eef0f3;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tool_field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.tool_input {
+    height: 40px;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-secondary);
+    padding: 0 12px;
+    outline: none;
+    color: var(--color-text-primary);
+    font-size: 14px;
+    font-family: var(--font-sans);
+}
+
+.tool_input:focus {
+    border-color: var(--tool_green_dark);
+    box-shadow: 0 0 0 3px var(--tool_focus);
+}
+
+.tool_submit {
+    height: 42px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    background: var(--tool_green_dark);
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.tool-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
-    border-color: #c7d2fe;
-}
-
-/* Status badge inside tool list */
-.status {
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: #eef2ff;
-    color: #4338ca;
-    font-weight: 600;
-}
-
-/* Badge in details header */
-.badge {
-    font-size: 12px;
-    padding: 5px 10px;
-    border-radius: 999px;
-    background: #e0f2fe;
-    color: #0369a1;
-    font-weight: 600;
-}
-
-/* Details header */
-.details-header {
-    display: flex;
-    justify-content: space-between;
+    display: inline-flex;
     align-items: center;
-    margin-bottom: 16px;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.15s;
+    padding-right: 8px;
 }
 
-/* Grid info blocks */
-.grid-info {
+.tool_submit:hover {
+    background: var(--tool_green_mid);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   TOOL LIST
+   ══════════════════════════════════════════════════════════ */
+
+.tool_list {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.tool_list_item {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    transition: background 0.12s;
+    text-align: left;
+}
+
+.tool_list_item:last-child {
+    border-bottom: none;
+}
+
+.tool_list_item:hover {
+    background: var(--color-background-secondary);
+}
+
+.tool_list_item_name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   BADGES
+   ══════════════════════════════════════════════════════════ */
+
+.tool_badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tool_badge--available {
+    background: var(--tool_green_light);
+    color: #27500a;
+}
+
+.tool_badge--in_use {
+    background: var(--tool_blue_bg);
+    color: var(--tool_blue_text);
+}
+
+.tool_badge--maintenance {
+    background: var(--tool_amber_bg);
+    color: var(--tool_amber_text);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   PANEL
+   ══════════════════════════════════════════════════════════ */
+
+.tool_panel {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding:500;
+}
+
+.tool_panel_empty {
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    padding: 2rem;
+}
+
+.tool_panel_empty_icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--tool_green_light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tool_panel_empty_icon i {
+    font-size: 24px;
+    color: var(--tool_green_dark);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   DETAIL
+   ══════════════════════════════════════════════════════════ */
+
+.tool_detail {
+    padding: 22px;
+}
+
+.tool_detail_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.tool_detail_title {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 500;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   STATS
+   ══════════════════════════════════════════════════════════ */
+
+.tool_stats_grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.tool_stat {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    background: var(--color-background-secondary);
+}
+
+.tool_stat_label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.tool_stat_value {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   OVERVIEW
+   ══════════════════════════════════════════════════════════ */
+
+.tool_overview_header {
+    margin-bottom: 18px;
+}
+
+.tool_overview_title {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 500;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   ALERTS
+   ══════════════════════════════════════════════════════════ */
+
+.tool_alert {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 18px;
+    border: 0.5px solid;
+    font-size: 14px;
+}
+
+.tool_alert--success {
+    background: var(--color-background-success);
+    color: var(--color-text-success);
+    border-color: var(--color-border-success);
+}
+
+.tool_alert--warning {
+    background: var(--color-background-warning);
+    color: var(--color-text-warning);
+    border-color: var(--color-border-warning);
+}
+/* ══════════════════════════════════════════════════════════
+   BOOKINGS
+   ══════════════════════════════════════════════════════════ */
+
+.tool_booking_list {
+    display: flex;
+    flex-direction: column;
     gap: 12px;
 }
 
-/* Info box cards */
-.info-box {
-    background: #f9fafb;
-    border: 1px solid #eef0f3;
-    border-radius: 10px;
-    padding: 12px;
+.tool_booking_card {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    background: var(--color-background-secondary);
 }
 
-.info-label {
+.tool_booking_top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.tool_booking_name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0 0 4px;
+}
+
+.tool_booking_due {
     font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 6px;
+    color: var(--color-text-secondary);
 }
 
-.info-value {
-    font-size: 16px;
-    font-weight: 700;
-    color: #111827;
+.tool_booking_actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-/* Empty state */
-.empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: #6b7280;
+.tool_damage_form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
-.empty-state h3 {
-    margin-bottom: 6px;
-    color: #374151;
+.tool_btn {
+    height: 38px;
+    padding: 0 16px;
+    border: none;
+    border-radius: var(--border-radius-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.15s;
 }
 
-/* Utility spacing */
-.mt-4 {
-    margin-top: 16px;
+.tool_btn--success {
+    background: var(--color-background-success);
+    color: var(--color-text-success);
 }
 
-.mt-6 {
+.tool_btn--success:hover {
+    background: #dcebc8;
+}
+
+.tool_btn--danger {
+    background: var(--color-background-danger);
+    color: var(--color-text-danger);
+}
+
+.tool_btn--danger:hover {
+    background: #f5dede;
+}
+
+.tool_booking_section {
     margin-top: 24px;
+    padding-top: 20px;
+    border-top: 0.5px solid var(--color-border-tertiary);
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .grid-info {
+.tool_booking_form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tool_empty_bookings {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--color-text-secondary);
+}
+
+.tool_empty_bookings i {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+    color: var(--color-text-tertiary);
+}
+
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+
+    .tool_booking_form,
+    .tool_damage_form,
+    .tool_booking_actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+}
+
+.tool_flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.tool_flag--maintenance {
+    background: var(--color-background-warning);
+    color: var(--color-text-warning);
+}
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════ */
+
+@media (max-width: 860px) {
+
+    .tool_layout {
         grid-template-columns: 1fr;
     }
+
+    .tool_stats_grid {
+        grid-template-columns: 1fr;
+    }
+
 }

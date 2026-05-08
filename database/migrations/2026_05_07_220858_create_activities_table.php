@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
-    
-            $table->unsignedBigInteger('member_id');
-    
-            $table->text('content');
-            $table->integer('bounty')->default(0);
-    
-            $table->string('status')->default('open');
-            $table->unsignedBigInteger('accepted_answer_id')->nullable();
-    
+
+           $table->foreignId('plot_id');
+
+            $table->string('type');
+
+            $table->string('member')->nullable();
+
+            $table->string('crop')->nullable();
+
+            $table->string('fertilizer')->nullable();
+
             $table->timestamps();
         });
     }
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('activities');
     }
 };

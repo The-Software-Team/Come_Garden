@@ -3,92 +3,307 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Contracts\Marketplace\MarketplaceServiceInterface as Market;
 use Illuminate\Http\Request;
-
-use App\Contracts\Marketplace\MarketplaceServiceInterface;
-use App\Models\Market\Listing;
-use App\Models\Market\Trade;
-use App\Models\Market\Question;
+use Illuminate\Support\Facades\Auth;
 
 class MarketController extends Controller
 {
-    protected MarketplaceServiceInterface $service;
+    public function __construct(protected Market $market) {}
 
-    public function __construct(MarketplaceServiceInterface $service)
+
+    /* ══════════════════════════════════════════════════════════
+       PAGES
+       ══════════════════════════════════════════════════════════ */
+
+    /**
+     * The public marketplace — listings, questions, canning sessions.
+     * GET /marketplace/market
+     */
+    public function market(Request $request)
     {
-        $this->service = $service;
+        $user     = Auth::user();
+        $listings = $this->market->getListings($request->only('type', 'allergen_free', 'search'));
+        $questions = $this->market->getQuestions($request->only('search', 'unanswered'));
+        $sessions  = $this->market->getCanningSessions(['status' => 'open']);
+        $allergens = $this->market->getAllergenCategories() ?? [];
+        $surplus   = $this->market->predictSurplus($user->id);
+
+        return view('marketplace.market', [
+            'listings'         => $listings['listings'],
+            'questions'        => $questions['questions'],
+            'canningSessions'  => $sessions['sessions'],
+            'allergenCategories' => $allergens,
+            'surplusAlerts'    => $surplus['predictions'],
+            'userAllergens'    => $this->market->getUserAllergens($user->id)['allergens'],
+        ]);
     }
 
-    public function index() {
-        $listings = Listing::get();
-        $questions = [];
+    /**
+     * The member's personal dashboard — my listings, trades, questions, answers, canning.
+     * GET /marketplace/profile
+     */
+    public function profile()
+    {
+        $user     = Auth::user();
+        $listings = $this->market->getUserListings($user->id);
+        $trades   = $this->market->getUserTrades($user->id);
+        $questions = $this->market->getUserQuestions($user->id);
+        $answers  = $this->market->getUserAnswers($user->id);
+        $canning  = $this->market->getUserCanningSessions($user->id);
+        $karma    = $this->market->getUserKarma($user->id);
+        $quality  = $this->market->getUserQualityScore($user->id);
 
-        return view('marketplace.index', compact('listings', 'questions'));
+        return view('marketplace.profile', [
+            'myListings'   => $listings['listings'],
+            'myTrades'     => $trades['trades'],
+            'myQuestions'  => $questions['questions'],
+            'myAnswers'    => $answers['answers'],
+            'myOrganised'  => $canning['organised'],
+            'myJoined'     => $canning['joined'],
+            'karma'        => $karma['karma_points'],
+            'karmaLog'     => $karma['transactions'],
+            'qualityScore' => $quality['quality_score'],
+        ]);
     }
 
-    public function profile() {
-        $member = auth()->user();
+    /**
+     * GET /admin/marketplace
+     */
+    public function index()
+    {
+        $overview = $this->market->getAdminOverview();
+ 
+        return view('admin.marketplace.index', [
+            'stats'           => $overview['stats'],
+            'recentListings'  => $overview['recent_listings'],
+            'recentTrades'    => $overview['recent_trades'],
+            'flaggedListings' => $overview['flagged_listings'],
+        ]);
+    }
 
-        $listings = Listing::where('member_id', $member->id)->get();
 
-        $trades = Trade::where('member_id', $member->id)->get();
 
-        $questions = Question::with('answers')
-            ->where('member_id', $member->id)
-            ->get();
+    /* ══════════════════════════════════════════════════════════
+       LISTING ACTIONS
+       ══════════════════════════════════════════════════════════ */
 
-        return view('marketplace.profile', compact(
-            'listings',
-            'trades',
-            'questions'
+    /**
+     * POST /marketplace/listings
+     */
+    public function storeListing(Request $request)
+    {
+        $request->validate([
+            'produce_name'        => 'required|string|max:120',
+            'type'                => 'required|in:standard,flash,gift',
+            'quantity_kg'         => 'required|numeric|min:0.1',
+            'description'         => 'nullable|string|max:500',
+            'pickup_window_hours' => 'nullable|integer|min:1|max:24',
+            'price'               => 'nullable|numeric|min:0',
+        ]);
+
+        $result = $this->market->createListing(array_merge(
+            $request->all(),
+            ['user_id' => Auth::id()]
         ));
 
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
     }
 
-    public function createListing(Request $request)
+
+    /* ══════════════════════════════════════════════════════════
+       TRADE ACTIONS
+       ══════════════════════════════════════════════════════════ */
+
+    /**
+     * POST /marketplace/trades
+     */
+    public function storeTrade(Request $request)
     {
-        $data = $request->except('_token');
+        $request->validate([
+            'listing_id' => 'required|exists:listings,id',
+            'note'       => 'nullable|string|max:300',
+        ]);
 
-        $data['member_id'] = auth()->user()->id;
-        $this->service->createListing($data);
+        $result = $this->market->createTrade(array_merge(
+            $request->all(),
+            ['buyer_id' => Auth::id()]
+        ));
 
-        return redirect()->back()->with('message', 'Listing action not implemented yet');
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
     }
 
-    public function createTrade(Request $request)
+    /**
+     * POST /marketplace/flash/claim
+     */
+    public function claimFlash(Request $request)
     {
-        $data = $request->except('_token');
+        $request->validate(['listing_id' => 'required|exists:listings,id']);
 
-        $data['member_id'] = auth()->user()->id;
-        $this->service->createTrade($data);
+        $result = $this->market->claimFlashListing(
+            $request->listing_id,
+            Auth::id()
+        );
 
-        return redirect()->back()->with('message', 'Trade action not implemented yet');
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
     }
 
-    public function askQuestion(Request $request)
+
+    /* ══════════════════════════════════════════════════════════
+       Q&A ACTIONS
+       ══════════════════════════════════════════════════════════ */
+
+    /**
+     * POST /marketplace/questions
+     */
+    public function storeQuestion(Request $request)
     {
-        $data = $request->except('_token');
+        $request->validate([
+            'title' => 'required|string|max:200',
+            'body'  => 'required|string|max:1000',
+            'tags'  => 'nullable|string|max:100',
+        ]);
 
-        $data['member_id'] = auth()->user()->id;   
-        $this->service->askQuestion($data);
+        $result = $this->market->askQuestion(array_merge(
+            $request->all(),
+            ['user_id' => Auth::id()]
+        ));
 
-        return redirect()->back()->with('message', 'Question action not implemented yet');
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
     }
 
-    public function answerQuestion(Request $request)
+    /**
+     * POST /marketplace/answers
+     */
+    public function storeAnswer(Request $request)
     {
-        $data = $request->except('_token');
+        $request->validate([
+            'question_id' => 'required|exists:questions,id',
+            'body'        => 'required|string|max:1000',
+        ]);
 
-        $data['member_id'] = auth()->user()->id;
-        $this->service->answerQuestion($data);
+        $result = $this->market->answerQuestion(array_merge(
+            $request->all(),
+            ['user_id' => Auth::id()]
+        ));
 
-        return redirect()->back()->with('message', 'Answer action not implemented yet');
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
     }
 
-    public function acceptAnswer(Request $request)
+
+    /* ══════════════════════════════════════════════════════════
+       QUALITY RATING
+       ══════════════════════════════════════════════════════════ */
+
+    /**
+     * POST /marketplace/ratings
+     */
+    public function storeRating(Request $request)
     {
-        // not implemented yet
-        return redirect()->back()->with('message', 'Accept answer not implemented yet');
+        $request->validate([
+            'listing_id' => 'required|exists:listings,id',
+            'score'      => 'required|integer|min:1|max:5',
+            'comment'    => 'nullable|string|max:300',
+            'organic'    => 'nullable|boolean',
+        ]);
+
+        $result = $this->market->submitQualityRating(array_merge(
+            $request->all(),
+            ['user_id' => Auth::id()]
+        ));
+
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
     }
 
+
+    /* ══════════════════════════════════════════════════════════
+       CANNING SESSIONS
+       ══════════════════════════════════════════════════════════ */
+
+    /**
+     * POST /marketplace/canning
+     */
+    public function storeCanningSession(Request $request)
+    {
+        $request->validate([
+            'title'              => 'required|string|max:150',
+            'description'        => 'nullable|string|max:500',
+            'scheduled_at'       => 'required|date|after:today',
+            'location'           => 'required|string|max:200',
+            'max_members'        => 'required|integer|min:2|max:30',
+            'produce_target'     => 'required|string|max:200',
+        ]);
+
+        $result = $this->market->createCanningSession(array_merge(
+            $request->all(),
+            ['organizer_id' => Auth::id()]
+        ));
+
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
+    }
+
+    /**
+     * POST /marketplace/canning/join
+     */
+    public function joinCanningSession(Request $request)
+    {
+        $request->validate([
+            'session_id'   => 'required|exists:canning_sessions,id',
+            'produce_name' => 'required|string|max:100',
+            'quantity_kg'  => 'required|numeric|min:0.1',
+        ]);
+
+        $result = $this->market->joinCanningSession(
+            $request->session_id,
+            Auth::id(),
+            $request->only('produce_name', 'quantity_kg')
+        );
+
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
+    }
+
+
+    /* ══════════════════════════════════════════════════════════
+       ALLERGEN PROFILE
+       ══════════════════════════════════════════════════════════ */
+
+    /**
+     * POST /marketplace/allergens
+     */
+    public function updateAllergens(Request $request)
+    {
+        $result = $this->market->updateUserAllergens(
+            Auth::id(),
+            $request->input('allergens', [])
+        );
+
+        return back()->with(
+            $result['success'] ? 'message' : 'error',
+            $result['message']
+        );
+    }
 }

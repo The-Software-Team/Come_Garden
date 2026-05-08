@@ -11,19 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tool_penalties', function (Blueprint $table) {
+        Schema::create('penalties', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('member_id');
             $table->foreignId('booking_id');
 
-            $table->string('type');
+            $table->enum('type', [
+                'service',
+                'fine'
+            ]);
 
-            $table->integer('severity')->nullable(); 
+            $table->string('severity')->nullable(); 
 
             $table->string('status')->default('active');
 
             $table->integer('amount')->default(0);
+
+            $table->boolean('resolved')->default(false);
+            $table->text('reason')->nullable();
 
             $table->timestamps();
 
@@ -36,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tool_penalties');
+        Schema::dropIfExists('penalties');
     }
 };
