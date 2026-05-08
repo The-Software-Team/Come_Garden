@@ -5,18 +5,18 @@ namespace App\Models\Market;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Member;
 
-class Answer extends Model
+class CanningContributor extends Model
 {
     //
 protected $fillable = [
-    'question_id',
+    'session_id',
     'user_id',
-    'body',
-    'is_accepted',
+    'produce_name',
+    'quantity_kg',
 ];
-public function question()
+public function session()
 {
-    return $this->belongsTo(Question::class);
+    return $this->belongsTo(CanningSession::class, 'session_id');
 }
 
 public function user()

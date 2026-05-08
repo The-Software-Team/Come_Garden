@@ -142,6 +142,7 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::post('/volunteer', [VolunteerController::class, 'createShift'])
         ->name('admin.volunteer.shift.create');
   
+    Route::get('/market', [MarketController::class, 'index'])->name('admin.marketplace.index');
 
     Route::get('plots', [PlotController::class, 'admin_index']);
     Route::post('rentals', [RentalController::class, 'rent_plot']);
@@ -184,22 +185,36 @@ Route::prefix('volunteer')->group(function () {
 });
 
 
-## Market Place
-Route::prefix('marketplace')->group(function () {
-    Route::get('/', [MarketController::class, 'index'])
-        ->name('marketplace.index');
+//    MARKETPLACE ROUTES
+Route::prefix('marketplace')->name('marketplace.')->group(function () {
 
-    Route::get('/profile', [MarketController::class, 'profile'])->name('marketplace.profile');
+    // Pages
+    Route::get('/market',  [MarketController::class, 'market'])->name('market');
+    Route::get('/profile', [MarketController::class, 'profile'])->name('profile');
 
-    Route::post('/listings', [MarketController::class, 'createListing'])->name('marketplace.listings.store');
-    Route::post('/trades', [MarketController::class, 'createTrade'])->name('marketplace.trades.store');
-    Route::post('/questions', [MarketController::class, 'askQuestion'])->name('marketplace.questions.store');
-    Route::post('/answers', [MarketController::class, 'answerQuestion'])->name('marketplace.answers.store');
+    // Listings
+    Route::post('/listings', [MarketController::class, 'storeListing'])->name('listings.store');
 
-    Route::post('/profile/accept_answer', [MarketController::class, 'acceptAnswer'])->name('marketplace.answer.accept');
-    Route::post('/profile/accept_trade', [MarketController::class, 'acceptTrade'])->name('marketplace.trade.accept');
+    // Trades
+    Route::post('/trades',       [MarketController::class, 'storeTrade'])->name('trades.store');
+    Route::post('/flash/claim',  [MarketController::class, 'claimFlash'])->name('flash.claim');
 
+    // Q&A
+    Route::post('/questions', [MarketController::class, 'storeQuestion'])->name('questions.store');
+    Route::post('/answers',   [MarketController::class, 'storeAnswer'])->name('answers.store');
+
+    // Quality ratings
+    Route::post('/ratings', [MarketController::class, 'storeRating'])->name('ratings.store');
+
+    // Canning
+    Route::post('/canning',      [MarketController::class, 'storeCanningSession'])->name('canning.store');
+    Route::post('/canning/join', [MarketController::class, 'joinCanningSession'])->name('canning.join');
+
+    // Allergen profile
+    Route::post('/allergens', [MarketController::class, 'updateAllergens'])->name('allergens.update');
 });
+
+
 
 ## Plot
 Route::get('/plots', [PlotController::class, 'market']);

@@ -13,17 +13,52 @@ return new class extends Migration
     {
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
-    
-            $table->foreignId('member_id');
-    
-            // Listing data
-            $table->string('item');
-            $table->integer('quantity')->unsigned();
-            $table->string('type');
-            $table->text('request')->nullable();
-            $table->string('status')->nullable()->default("pending");
-    
+
+            $table->foreignId('user_id');
+
+            $table->string('produce_name');
+
+            $table->enum('type', [
+                'standard',
+                'gift',
+                'flash'
+            ])->default('standard');
+
+            $table->decimal('quantity_kg', 8, 2);
+
+            $table->decimal('price', 10, 2)
+                ->nullable();
+
+            $table->text('description')
+                ->nullable();
+
+            $table->string('pickup_location')
+                ->nullable();
+
+            $table->integer('pickup_window_hours')
+                ->nullable();
+
+            $table->timestamp('expires_at')
+                ->nullable();
+
+            $table->enum('status', [
+                'available',
+                'reserved',
+                'completed',
+                'expired',
+                'cancelled'
+            ])->default('available');
+
+            $table->text('allergen_flags')
+                ->nullable();
+
+            $table->decimal('quality_score', 3, 1)
+                ->nullable();
+
             $table->timestamps();
+
+            $table->index(['status', 'type']);
+            $table->index('expires_at');
         });
     }
     /**

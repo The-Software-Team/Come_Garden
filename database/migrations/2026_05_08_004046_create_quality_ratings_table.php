@@ -11,23 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trades', function (Blueprint $table) {
+        Schema::create('quality_ratings', function (Blueprint $table) {
             $table->id();
-    
-            $table->unsignedBigInteger('listing_id');
-            $table->unsignedBigInteger('member_id');
-    
-            $table->string('status')->default('pending');
-    
+
+            $table->foreignId('listing_id');
+
+            $table->foreignId('user_id');
+
+            $table->tinyInteger('score');
+
+            $table->text('review')
+                ->nullable();
+
             $table->timestamps();
-        });
-    }
+
+            $table->unique(['listing_id', 'user_id']);
+        }); 
+   }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('trades');
+        Schema::dropIfExists('quality_ratings');
     }
 };

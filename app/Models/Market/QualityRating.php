@@ -5,18 +5,18 @@ namespace App\Models\Market;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Member;
 
-class Answer extends Model
+class QualityRating extends Model
 {
     //
 protected $fillable = [
-    'question_id',
+    'listing_id',
     'user_id',
-    'body',
-    'is_accepted',
+    'score',
+    'review',
 ];
-public function question()
+public function listing()
 {
-    return $this->belongsTo(Question::class);
+    return $this->belongsTo(Listing::class);
 }
 
 public function user()
