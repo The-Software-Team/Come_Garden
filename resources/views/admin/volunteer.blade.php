@@ -1,14 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.volunteer')
 
-@section('title', 'Volunteer Admin')
+@section('title', 'Manage Shifts')
 
-@section('styles')
-@vite([
-    'resources/css/domain/volunteer.css'
-])
-@endsection
-
-@section('dynamics')
+@push('scripts')
 <script>
 
 function showShift(shift) {
@@ -57,14 +51,11 @@ function showShift(shift) {
 
                 <input type="hidden" name="shift_id" value="${shift.id}">
 
-                <textarea 
-                    name="members" 
-                    class="input"
-                    placeholder="Enter member IDs (comma separated)">
-                </textarea>
+                <input class="input" name="member_id" type="number" placeholder="Member ID" required>
+                <input class="input" name="role" placeholder="Role (heavy/light)" value="light">
 
                 <button type="submit" class="btn">
-                    Assign Members
+                    Assign Member
                 </button>
             </form>
 
@@ -75,7 +66,8 @@ function showShift(shift) {
             <form method="POST" action="{{ route('volunteer.shift.complete') }}">
                 @csrf
 
-                <input type="hidden" name="shift_id" value="${shift.id}">
+                <input type="hidden" name="assignment_id" value="${shift.id}">
+                <input type="hidden" name="hours" value="2">
 
                 <button type="submit" class="btn btn-success">
                     Mark Shift Completed
@@ -87,7 +79,7 @@ function showShift(shift) {
 }
 
 </script>
-@endsection
+@endpush
 
 
 @section('content')

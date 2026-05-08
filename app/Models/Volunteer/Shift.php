@@ -29,4 +29,9 @@ class Shift extends Model
         return $this->belongsToMany(Member::class, 'assignments');
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
 }
