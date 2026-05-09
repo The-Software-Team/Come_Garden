@@ -12,7 +12,7 @@ use App\Http\Controllers\SeedBankController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\MarketController;
 
-use App\Http\Controllers\VolunteerController;
+use App\Http\Controllers\Volunteer\VolunteerController;
 
 use App\Http\Controllers\MemberSeedBankController;
 
@@ -144,6 +144,15 @@ Route::middleware('admin')->prefix('admin')->group(function () {
 
     Route::post('/volunteer', [VolunteerController::class, 'createShift'])
         ->name('admin.volunteer.shift.create');
+
+    Route::get('/volunteer/alerts', [VolunteerController::class, 'adminAlerts'])
+        ->name('admin.volunteer.alerts');
+
+    Route::get('/volunteer/incidents', [VolunteerController::class, 'adminIncidents'])
+        ->name('admin.volunteer.incidents');
+
+    Route::get('/volunteer/proposals', [VolunteerController::class, 'fundProposals'])
+        ->name('admin.volunteer.proposals');
   
     Route::get('/market', [MarketController::class, 'index'])->name('admin.marketplace.index');
 
@@ -176,15 +185,67 @@ Route::prefix('tools')->group(function () {
 Route::prefix('volunteer')->group(function () {
     Route::get('/', [VolunteerController::class, 'index'])->name('volunteer');
 
+    // F23: Task Difficulty
+    Route::post('/difficulty', [VolunteerController::class, 'calculateDifficulty'])
+        ->name('volunteer.difficulty');
+
+    // F24: Shift Balance
+    Route::get('/shift/{shift}/balance', [VolunteerController::class, 'shiftBalance'])
+        ->name('volunteer.shift.balance');
+
+    // F25: Service Hours
+    Route::get('/hours', [VolunteerController::class, 'serviceLedger'])
+        ->name('volunteer.hours');
+    Route::post('/hours/log', [VolunteerController::class, 'logHours'])
+        ->name('volunteer.hours.log');
+
+    // F26: Shift Assignment & Swaps
     Route::post('/shift/assign', [VolunteerController::class, 'assign'])
         ->name('volunteer.shift.assign');
-
     Route::post('/shift/complete', [VolunteerController::class, 'complete'])
         ->name('volunteer.shift.complete');
-
-    Route::post('/swap/request', [VolunteerController::class, 'requestSwap'])
+    Route::post('/swap/request', [VolunteerController::class, 'swapRequest'])
         ->name('volunteer.swap.request');
+    Route::post('/swap/{swap}/respond', [VolunteerController::class, 'respondSwap'])
+        ->name('volunteer.swap.respond');
 
+    // F29: Security Access
+    Route::post('/access/log', [VolunteerController::class, 'logAccess'])
+        ->name('volunteer.access.log');
+    Route::get('/access/logs', [VolunteerController::class, 'accessLogs'])
+        ->name('volunteer.access.logs');
+
+    // F30: Mentorship
+    Route::post('/mentor/pair', [VolunteerController::class, 'pairMentor'])
+        ->name('volunteer.mentor.pair');
+    Route::post('/mentor/pair-manual', [VolunteerController::class, 'createPairManually'])
+        ->name('volunteer.mentor.pair-manual');
+
+    // F31: Incident Reporting
+    Route::post('/incident/report', [VolunteerController::class, 'reportIncident'])
+        ->name('volunteer.incident.report');
+    Route::post('/incident/{incident}/update', [VolunteerController::class, 'updateIncident'])
+        ->name('volunteer.incident.update');
+
+    // F32: Weather
+    Route::post('/shift/{shift}/weather', [VolunteerController::class, 'evaluateWeather'])
+        ->name('volunteer.shift.weather');
+
+    // F28: Fund Proposals
+    Route::get('/proposals', [VolunteerController::class, 'fundProposals'])
+        ->name('volunteer.proposals');
+    Route::post('/proposals/create', [VolunteerController::class, 'createProposal'])
+        ->name('volunteer.proposals.create');
+    Route::post('/proposals/{proposal}/vote', [VolunteerController::class, 'castVote'])
+        ->name('volunteer.proposals.vote');
+    Route::post('/proposals/{proposal}/close', [VolunteerController::class, 'closeProposal'])
+        ->name('volunteer.proposals.close');
+
+    // F27: Emergency Alerts
+    Route::post('/alert/broadcast', [VolunteerController::class, 'broadcastAlert'])
+        ->name('volunteer.alert.broadcast');
+    Route::post('/alert/{alert}/resolve', [VolunteerController::class, 'resolveAlert'])
+        ->name('volunteer.alert.resolve');
 });
 
 
