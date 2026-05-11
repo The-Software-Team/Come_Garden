@@ -275,7 +275,7 @@ textarea.form-control { resize:none; height:80px; }
   <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="sidebar-section">Operations</div>
-    <button class="nav-btn" data-tab="tasks" onclick="show('tasks',this)"><i class="ti ti-list-check"></i>Task Weighting</button>
+    <button class="nav-btn active" data-tab="tasks" onclick="show('tasks',this)"><i class="ti ti-list-check"></i>Task Weighting</button>
     <button class="nav-btn" onclick="show('loadbalancer',this)"><i class="ti ti-scale"></i>Shift Load-Balancer</button>
     <button class="nav-btn" onclick="show('hours',this)"><i class="ti ti-clock"></i>Service Hours <span class="badge">{{ $thisMonthHours ?? 0 }}</span></button>
     <button class="nav-btn" onclick="show('shifts',this)"><i class="ti ti-calendar"></i>Shifts &amp; Swaps <span class="badge">{{ $myAssignments->count() }}</span></button>
@@ -296,7 +296,7 @@ textarea.form-control { resize:none; height:80px; }
   <main class="main">
 
     <!-- F23 — TASK WEIGHTING -->
-    <div class="page" id="page-tasks">
+    <div class="page active" id="page-tasks">
       <div class="page-title">
         <div>
           <h2>Communal Task Weighting Logic</h2>
@@ -490,6 +490,7 @@ textarea.form-control { resize:none; height:80px; }
         </div>
       </div>
       <div class="g2">
+        @if($isAdmin)
         <div class="card">
           <div class="card-head"><i class="ti ti-broadcast"></i><div><h3>Compose Broadcast</h3></div></div>
           <form method="POST" action="{{ route('volunteer.alert.broadcast') }}">
@@ -514,6 +515,7 @@ textarea.form-control { resize:none; height:80px; }
             <button type="submit" class="btn btn-primary"><i class="ti ti-send"></i> Broadcast to all members</button>
           </form>
         </div>
+        @endif
         <div class="card">
           <div class="card-head"><i class="ti ti-history"></i><div><h3>Recent Broadcasts</h3></div></div>
           @forelse($activeAlerts as $alert)
@@ -554,15 +556,23 @@ textarea.form-control { resize:none; height:80px; }
             <div class="vote-row"><span class="vote-name">{{ $proposal['title'] }}</span><span class="vote-pct" style="color:var(--fern)">{{ $proposal['percentage'] }}%</span></div>
             <div class="vote-bg"><div class="vote-fill" style="width:{{ $proposal['percentage'] }}%;background:var(--leaf)"></div></div>
             <div class="vote-sub">{{ $proposal['total'] }} votes · £{{ $proposal['estimated_cost'] }} · Ends {{ $proposal['voting_ends_at']->format('d M') }}</div>
+            @if($isAdmin)
+            <form method="POST" action="{{ route('volunteer.proposals.close', $proposal['id']) }}" style="margin-top:10px">
+              @csrf
+              <button type="submit" class="btn btn-ghost" style="padding:6px 12px;font-size:11px">🔒 Close Voting</button>
+            </form>
+            @else
             <form method="POST" action="{{ route('volunteer.proposals.vote', $proposal['id']) }}" style="margin-top:10px;display:flex;gap:8px">
               @csrf
               <button type="submit" name="vote" value="yes" class="btn btn-primary" style="padding:6px 12px;font-size:11px">✅ Yes</button>
               <button type="submit" name="vote" value="no" class="btn btn-ghost" style="padding:6px 12px;font-size:11px">❌ No</button>
             </form>
+            @endif
           </div>
           @empty
           <div style="padding:20px;text-align:center;color:var(--text-muted)">No open proposals</div>
           @endforelse
+          @if($isAdmin)
           <div style="margin-top:1.25rem">
             <button class="btn btn-ghost" onclick="document.getElementById('proposal-form').style.display='block'"><i class="ti ti-plus"></i> Propose new option</button>
           </div>
@@ -582,6 +592,7 @@ textarea.form-control { resize:none; height:80px; }
             </div>
             <button type="submit" class="btn btn-primary">Submit Proposal</button>
           </form>
+          @endif
         </div>
         <div class="card">
           <div class="card-head"><i class="ti ti-history"></i><div><h3>Past Votes</h3></div></div>
@@ -648,7 +659,7 @@ textarea.form-control { resize:none; height:80px; }
               <div class="gate-rotate">Rotates weekly</div>
             </div>
           </div>
-          <button class="btn btn-primary" style="margin-top:1.25rem"><i class="ti ti-refresh"></i>Rotate codes now</button>
+          @if($isAdmin)<button class="btn btn-primary" style="margin-top:1.25rem"><i class="ti ti-refresh"></i>Rotate codes now</button>@endif
         </div>
       </div>
     </div>

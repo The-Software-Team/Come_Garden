@@ -142,6 +142,9 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('/volunteer' , [VolunteerController::class, 'adminIndex'])
         ->name('admin.volunteer');
 
+    Route::get('/volunteer/dashboard' , [VolunteerController::class, 'adminDashboard'])
+        ->name('admin.volunteer.dashboard');
+
     Route::post('/volunteer', [VolunteerController::class, 'createShift'])
         ->name('admin.volunteer.shift.create');
 

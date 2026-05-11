@@ -155,7 +155,8 @@ textarea.form-control { resize:none; height:80px; }
     <button class="nav-btn" onclick="show('incidents',this)"><i class="ti ti-alert-circle"></i>Incidents <span class="badge">{{ $openIncidents }}</span></button>
 
     <div class="sidebar-section">Finance</div>
-    <button class="nav-btn" onclick="show('proposals',this)"><i class="ti ti-podium"></i>Fund Proposals</button>
+    <button class="nav-btn" onclick="show('proposals',this)"><i class="ti ti-receipt"></i>Fund Proposals</button>
+    <button class="nav-btn" onclick="show('voting',this)"><i class="ti ti-chart-bar"></i>Fund Voting</button>
   </nav>
 
   <main class="main">
@@ -338,6 +339,94 @@ textarea.form-control { resize:none; height:80px; }
         </div>
         @empty
         <div class="tbl-row" style="grid-template-columns:1fr"><span class="sub">No proposals</span></div>
+        @endforelse
+      </div>
+    </div>
+
+    <!-- FUND VOTING -->
+    <div class="page" id="page-voting">
+      <div class="page-title">
+        <div>
+          <h2>Fund Voting Management</h2>
+          <p>Create proposals, view detailed voting results, and manage communal fund decisions.</p>
+        </div>
+        <button class="btn btn-primary" onclick="document.getElementById('new-proposal-form').style.display='block'">
+          <i class="ti ti-plus"></i> New Proposal
+        </button>
+      </div>
+
+      <!-- Create Proposal Form -->
+      <div id="new-proposal-form" style="display:none;background:var(--warm-w);border:1px solid var(--border);border-radius:var(--r-md);padding:1.5rem;margin-bottom:1.5rem">
+        <h3 style="margin-bottom:1rem">Create New Proposal</h3>
+        <form method="POST" action="{{ route('volunteer.proposals.create') }}">
+          @csrf
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div class="form-group">
+              <div class="form-label">Title</div>
+              <input type="text" name="title" class="form-control" placeholder="e.g. New greenhouse" required>
+            </div>
+            <div class="form-group">
+              <div class="form-label">Estimated Cost (£)</div>
+              <input type="number" name="estimated_cost" class="form-control" placeholder="500" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Description</div>
+            <textarea name="description" class="form-control" placeholder="Describe the proposal..." required></textarea>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Voting Ends</div>
+            <input type="date" name="voting_ends_at" class="form-control" required min="{{ now()->addDay()->format('Y-m-d') }}">
+          </div>
+          <button type="submit" class="btn btn-primary">Create Proposal</button>
+          <button type="button" class="btn btn-ghost" onclick="document.getElementById('new-proposal-form').style.display='none'">Cancel</button>
+        </form>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><div class="s-lbl">Active</div><div class="s-val">{{ $proposals->where('status', 'open')->count() }}</div></div>
+        <div class="stat sky"><div class="s-lbl">Total Votes</div><div class="s-val">{{ $totalVotesCast }}</div></div>
+        <div class="stat"><div class="s-lbl">Closed</div><div class="s-val">{{ $proposals->where('status', 'closed')->count() }}</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><i class="ti ti-chart-bar"></i><h3>All Proposals with Vote Details</h3></div>
+        @forelse($proposals as $proposal)
+        <div style="padding:1rem;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="name">{{ $proposal['title'] }}</div>
+              <div class="sub">£{{ $proposal['estimated_cost'] }} · {{ $proposal['description'] }}</div>
+            </div>
+            <div style="text-align:right">
+              <span class="pill @if($proposal['status']=='open') p-inprog @else p-resolved @endif">{{ $proposal['status'] }}</span>
+              <div style="margin-top:4px;font-size:12px;color:var(--text-muted)">Ends {{ $proposal['voting_ends_at']->format('d M Y') }}</div>
+            </div>
+          </div>
+          
+          <!-- Vote Results -->
+          <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div style="background:var(--parch);padding:0.75rem;border-radius:var(--r-sm)">
+              <div style="font-size:11px;color:var(--text-muted)">YES</div>
+              <div style="font-size:20px;font-weight:700;color:var(--fern)">{{ $proposal['yes'] }}</div>
+              <div style="font-size:11px">{{ $proposal['percentage'] }}%</div>
+            </div>
+            <div style="background:var(--parch);padding:0.75rem;border-radius:var(--r-sm)">
+              <div style="font-size:11px;color:var(--text-muted)">NO</div>
+              <div style="font-size:20px;font-weight:700;color:var(--berry)">{{ $proposal['no'] }}</div>
+              <div style="font-size:11px">{{ 100 - $proposal['percentage'] }}%</div>
+            </div>
+          </div>
+
+          @if($proposal['status']=='open')
+          <form method="POST" action="{{ route('volunteer.proposals.close', $proposal['id']) }}" style="margin-top:1rem">
+            @csrf
+            <button type="submit" class="btn btn-primary"><i class="ti ti-lock"></i> Close Voting</button>
+          </form>
+          @endif
+        </div>
+        @empty
+        <div style="padding:2rem;text-align:center;color:var(--text-muted)">No proposals yet</div>
         @endforelse
       </div>
     </div>

@@ -29,7 +29,7 @@ class VolunteerController extends Controller
             return $this->adminDashboard();
         }
         
-        return $this->userDashboard();
+        return $this->dashboard();
     }
 
     public function userDashboard(): View
@@ -129,7 +129,7 @@ class VolunteerController extends Controller
 
         // F24: Load balancer data
         $shiftsWithLoad = \App\Models\Volunteer\Shift::with('assignments')->where('status', 'active')
-            ->where('start_date', '>=', now())->get()->map(function($s) {
+            ->get()->map(function($s) {
                 $heavy = $s->assignments->where('role', 'heavy')->whereNotIn('status', ['swapped'])->count();
                 $light = $s->assignments->whereIn('role', ['light', 'admin'])->whereNotIn('status', ['swapped'])->count();
                 return [
@@ -289,9 +289,11 @@ class VolunteerController extends Controller
                 ];
             });
 
+        $isAdmin = $user->roles->contains('name', 'admin');
+
         return view('volunteer.dashboard', compact(
             // General
-            'totalHours', 'requiredHours', 'memberLevel', 'completedAssignments',
+            'totalHours', 'requiredHours', 'memberLevel', 'completedAssignments', 'isAdmin',
             // F23 - Task Weighting
             'tasks', 'totalTasks', 'hardTasks', 'mediumTasks', 'easyTasks',
             // F24 - Load Balancer
@@ -419,6 +421,7 @@ class VolunteerController extends Controller
             ];
         });
         $openProposals = $proposals->where('status', 'open')->count();
+        $totalVotesCast = $proposals->sum('total');
 
         // Access Logs
         $recentAccess = \App\Models\Volunteer\SecurityAccessLog::latest()->take(20)->get()->map(function($l) {
@@ -473,7 +476,7 @@ class VolunteerController extends Controller
             'totalMembers', 'totalShifts', 'activeShifts', 'totalAssignments',
             'metRequirement', 'atRisk',
             'activeAlerts', 'alertCount',
-            'proposals', 'openProposals',
+            'proposals', 'openProposals', 'totalVotesCast',
             'recentAccess', 'entriesToday', 'exitsToday',
             'incidents', 'openIncidents', 'inProgressIncidents', 'criticalIncidents',
             'shifts'
