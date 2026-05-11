@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use Illuminate\Support\Facades\Log;
 use App\Services\SeedBankService;
