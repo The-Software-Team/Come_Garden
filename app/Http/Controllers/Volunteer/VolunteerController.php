@@ -22,7 +22,82 @@ class VolunteerController extends Controller
 
     public function index(): View
     {
-        return $this->dashboard();
+        $user = auth()->user();
+        $isAdmin = $user->roles->contains('name', 'admin');
+        
+        if ($isAdmin) {
+            return $this->adminDashboard();
+        }
+        
+        return $this->userDashboard();
+    }
+
+    public function userDashboard(): View
+    {
+        $user = auth()->user();
+        $ledger = $this->volunteerService->getServiceLedger($user->id);
+        $totalHours = $ledger->total_hours ?? 0;
+        $requiredHours = $ledger->required_hours ?? 10;
+
+        // My shifts
+        $myAssignments = \App\Models\Volunteer\Assignment::with(['shift', 'task'])
+            ->where('member_id', $user->id)
+            ->whereIn('status', ['assigned', 'completed'])
+            ->get()->map(function($a) {
+                return [
+                    'id' => $a->id,
+                    'date' => $a->shift?->start_date?->format('d M'),
+                    'task' => $a->task?->name ?? 'Assigned task',
+                    'role' => $a->role,
+                    'status' => $a->status,
+                    'hours' => $a->hours,
+                ];
+            });
+
+        // My service hours
+        $completedCount = \App\Models\Volunteer\Assignment::where('member_id', $user->id)
+            ->where('status', 'completed')->count();
+        $thisMonthHours = \App\Models\Volunteer\Assignment::where('member_id', $user->id)
+            ->where('status', 'completed')
+            ->where('updated_at', '>=', now()->startOfMonth())->sum('hours');
+
+        // My votes
+        $myVotes = \App\Models\Volunteer\FundVote::where('member_id', $user->id)->get();
+        $myProposals = \App\Models\Volunteer\FundProposal::where('proposed_by', $user->id)->get();
+
+        // My mentor
+        $myMentor = \App\Models\Volunteer\MentorshipPair::where('mentee_id', $user->id)
+            ->where('status', 'active')->first();
+        $myMentorData = null;
+        if ($myMentor) {
+            $mentor = \App\Models\Member::find($myMentor->mentor_id);
+            $myMentorData = [
+                'name' => $mentor->name ?? 'Unknown',
+                'interests' => json_decode($myMentor->shared_interests ?? '[]'),
+            ];
+        }
+
+        // My incidents
+        $myIncidents = \App\Models\Volunteer\Incident::where('reported_by', $user->id)
+            ->latest()->take(5)->get()->map(function($i) {
+                return [
+                    'id' => $i->id,
+                    'title' => $i->title,
+                    'location' => $i->location,
+                    'severity' => $i->severity,
+                    'status' => $i->status,
+                    'created_at' => $i->created_at->format('d M Y'),
+                ];
+            });
+
+        // My swap requests
+        $mySwapRequests = \App\Models\Volunteer\SwapRequest::where('requester_id', $user->id)
+            ->where('status', 'pending')->get();
+
+        return view('volunteer.user', compact(
+            'totalHours', 'requiredHours', 'completedCount', 'thisMonthHours',
+            'myAssignments', 'myVotes', 'myProposals', 'myMentorData', 'myIncidents', 'mySwapRequests'
+        ));
     }
 
     public function dashboard(): View
@@ -288,8 +363,121 @@ class VolunteerController extends Controller
 
     public function adminIndex(): View
     {
-        $shifts = \App\Models\Volunteer\Shift::with('tasks')->latest()->get();
-        return view('admin.volunteer', compact('shifts'));
+        return $this->adminDashboard();
+    }
+
+    public function adminDashboard(): View
+    {
+        $user = auth()->user();
+
+        // Check if admin
+        $isAdmin = $user->roles->contains('name', 'admin');
+        if (!$isAdmin) {
+            return redirect()->route('volunteer')->with('error', 'Access denied. Admin only.');
+        }
+
+        // Overview Stats
+        $totalMembers = \App\Models\Member::count();
+        $totalShifts = \App\Models\Volunteer\Shift::count();
+        $activeShifts = \App\Models\Volunteer\Shift::where('status', 'active')->count();
+        $totalAssignments = \App\Models\Volunteer\Assignment::count();
+
+        // Service Hours Stats
+        $allLedgers = DB::table('service_ledger')->get();
+        $metRequirement = $allLedgers->where('total_hours', '>=', 10)->count();
+        $atRisk = $allLedgers->where('total_hours', '<', 3)->count();
+
+        // Emergency Alerts
+        $activeAlerts = \App\Models\Volunteer\EmergencyAlert::where('is_active', true)->get()->map(function($a) {
+            return [
+                'id' => $a->id,
+                'title' => $a->title,
+                'message' => $a->message,
+                'severity' => $a->severity,
+                'created_at' => $a->created_at->format('d M Y'),
+            ];
+        });
+        $alertCount = $activeAlerts->count();
+
+        // Fund Proposals (all)
+        $proposals = \App\Models\Volunteer\FundProposal::with('votes')->get()->map(function($p) {
+            $yes = $p->votes->where('vote', 'yes')->count();
+            $no = $p->votes->where('vote', 'no')->count();
+            $total = $p->votes->count();
+            $pct = $total > 0 ? round(($yes / $total) * 100) : 0;
+            return [
+                'id' => $p->id,
+                'title' => $p->title,
+                'description' => $p->description,
+                'estimated_cost' => $p->estimated_cost,
+                'status' => $p->status,
+                'voting_ends_at' => $p->voting_ends_at,
+                'yes' => $yes,
+                'no' => $no,
+                'total' => $total,
+                'percentage' => $pct,
+            ];
+        });
+        $openProposals = $proposals->where('status', 'open')->count();
+
+        // Access Logs
+        $recentAccess = \App\Models\Volunteer\SecurityAccessLog::latest()->take(20)->get()->map(function($l) {
+            $member = \App\Models\Member::find($l->member_id);
+            return [
+                'time' => $l->accessed_at->format('H:i'),
+                'date' => $l->accessed_at->format('d M'),
+                'member_name' => $member->name ?? 'Unknown',
+                'gate' => $l->gate_location,
+                'action' => $l->action,
+            ];
+        });
+        $entriesToday = \App\Models\Volunteer\SecurityAccessLog::where('action', 'entry')
+            ->whereDate('accessed_at', today())->count();
+        $exitsToday = \App\Models\Volunteer\SecurityAccessLog::where('action', 'exit')
+            ->whereDate('accessed_at', today())->count();
+
+        // Incidents (all)
+        $incidents = \App\Models\Volunteer\Incident::latest()->take(20)->get()->map(function($i) {
+            $reporter = \App\Models\Member::find($i->reported_by);
+            return [
+                'id' => $i->id,
+                'title' => $i->title,
+                'location' => $i->location,
+                'description' => $i->description,
+                'severity' => $i->severity,
+                'status' => $i->status,
+                'reporter' => $reporter->name ?? 'Unknown',
+                'created_at' => $i->created_at->format('d M Y'),
+            ];
+        });
+        $openIncidents = $incidents->where('status', 'open')->count();
+        $inProgressIncidents = $incidents->where('status', 'in_progress')->count();
+        $criticalIncidents = $incidents->whereIn('severity', ['critical', 'high'])->count();
+
+        // Shifts for management
+        $shifts = \App\Models\Volunteer\Shift::with(['tasks', 'assignments'])->latest()->take(20)->get()->map(function($s) {
+            $heavy = $s->assignments->where('role', 'heavy')->count();
+            $light = $s->assignments->whereIn('role', ['light', 'admin'])->count();
+            return [
+                'id' => $s->id,
+                'start_date' => $s->start_date->format('d M Y'),
+                'end_date' => $s->end_date->format('d M Y'),
+                'status' => $s->status,
+                'tasks' => $s->tasks->pluck('name'),
+                'heavy_count' => $heavy,
+                'light_count' => $light,
+            ];
+        });
+
+        return view('volunteer.admin', compact(
+            'totalMembers', 'totalShifts', 'activeShifts', 'totalAssignments',
+            'metRequirement', 'atRisk',
+            'activeAlerts', 'alertCount',
+            'proposals', 'openProposals',
+            'recentAccess', 'entriesToday', 'exitsToday',
+            'incidents', 'openIncidents', 'inProgressIncidents', 'criticalIncidents',
+            'shifts'
+        ));
     }
 
     // ── F23: Task Difficulty Score ───────────────────────────────────────────
