@@ -13,8 +13,8 @@ class MemberSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminRole = Role::create(['name' => 'admin']);
-        $userRole  = Role::create(['name' => 'user']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $userRole  = Role::firstOrCreate(['name' => 'user']);
 
         Member::factory()
             ->count(10)
@@ -29,13 +29,18 @@ class MemberSeeder extends Seeder
                 $member->roles()->attach($userRole->id);
             });
 
-        $admin = Member::factory()->create([
-            'name' => 'Saged Nader',
-            'email' => 'saged@example.com',
-            'password' => bcrypt('password'),
-        ]);
+        $admin = Member::firstOrCreate(
+            ['email' => 'saged@example.com'],
+            [
+                'name' => 'Saged Nader',
+                'email' => 'saged@example.com',
+                'password' => bcrypt('password'),
+            ]
+        );
 
+        if (!$admin->roles->contains($adminRole->id)) {
         $admin->roles()->attach($adminRole->id);
+    }
 
         Wallet::factory()->create([
             'member_id' => $admin->id,
