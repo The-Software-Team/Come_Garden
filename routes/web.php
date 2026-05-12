@@ -139,7 +139,7 @@ Route::middleware('admin')->prefix('admin')->group(function () {
     Route::get('tools', [ToolController::class, 'admin_index'])->name('admin.tools');
     Route::post('tools', [ToolController::class, 'store'])->name('tools.store');
 
-    Route::get('/volunteer' , [VolunteerController::class, 'adminIndex'])
+    Route::get('/volunteer' , [VolunteerController::class, 'index'])
         ->name('admin.volunteer');
 
     Route::get('/volunteer/dashboard' , [VolunteerController::class, 'adminDashboard'])
@@ -186,7 +186,7 @@ Route::prefix('tools')->group(function () {
 
 ## Volunteer System
 Route::prefix('volunteer')->group(function () {
-    Route::get('/', [VolunteerController::class, 'index'])->name('volunteer');
+    Route::get('/', [VolunteerController::class, 'userDashboard'])->name('volunteer');
 
     // F23: Task Difficulty
     Route::post('/difficulty', [VolunteerController::class, 'calculateDifficulty'])

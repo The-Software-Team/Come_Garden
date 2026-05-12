@@ -10,7 +10,7 @@
     // Detect which section we're in
     $inSeedbank     = str_starts_with($route, 'seedbank');
     $inMarketplace  = str_starts_with($route, 'marketplace');
-    $inOps          = str_starts_with($route, 'volunteer');
+    $inOps          = str_starts_with($route, 'ops');
     $inTools        = str_starts_with($route, 'tools');
     $inPlots        = str_starts_with($route, 'plots');
     $inAdmin        = str_starts_with($route, 'admin');
@@ -30,9 +30,23 @@
         <span class="app_nav_brand_name">Garden System</span>
     </a>
 
+    {{-- Section links --}}
+    <div class="app_nav_links" role="list">
+
+        {{-- Dashboard is always the first link in every section --}}
+        <a href="{{ route('dashboard.member') }}"
+           class="app_nav_link {{ $active('dashboard') }}"
+           role="listitem">
+            <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+            Dashboard
+        </a>
+
+        <div class="app_nav_sep" aria-hidden="true"></div>
+    
+    {{-- Right side: alerts + member avatar --}}
     <div class="app_nav_right">
 
-        {{-- Member avatar / initials --}} 
+        {{-- Member avatar / initials --}}
         <div class="app_nav_avatar"
              aria-label="Signed in as {{ auth()->user()?->name }}">
             {{ strtoupper(substr(auth()->user()?->name ?? 'M', 0, 1)) }}{{ strtoupper(substr(explode(' ', auth()->user()?->name ?? 'M ')[1] ?? '', 0, 1)) }}

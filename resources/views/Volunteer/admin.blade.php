@@ -117,7 +117,7 @@ textarea.form-control { resize:none; height:80px; }
 </head>
 <body>
 
-<header class="topbar">
+<!-- <header class="topbar">
   <div class="topbar-brand">
     <div class="brand-icon"><i class="ti ti-shield-check"></i></div>
     <div>
@@ -132,7 +132,7 @@ textarea.form-control { resize:none; height:80px; }
       <span class="user-name">{{ Auth::user()->name ?? 'Admin' }}</span>
     </div>
   </div>
-</header>
+</header> -->
 
 <div class="hero-strip">
   <div class="hero-title">

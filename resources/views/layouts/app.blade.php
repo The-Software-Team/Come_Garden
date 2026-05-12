@@ -13,6 +13,9 @@
 
 <body>
 
+    @include('components.navbar')
+
+
 @if(request()->is('seedbank*'))
     <div class="seedbank_top_nav">
 

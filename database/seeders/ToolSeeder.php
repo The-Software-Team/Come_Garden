@@ -4,60 +4,72 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\ToolLibrary\Tool;
-use App\Models\ToolLibrary\Booking;
-use App\Models\ToolLibrary\ToolWaitlist;
-use App\Models\ToolLibrary\Penalty;
-use App\Models\Member;
 
 class ToolSeeder extends Seeder
 {
     public function run(): void
     {
-        // SPECIAL MEMBER
-        $saged = Member::firstOrCreate(
-            ['email' => 'saged@example.com'],
-            ['name' => 'Saged Nader', 'password' => bcrypt('password')]
-        );
-
-        // TOOLS
-        $tools = Tool::factory()
-            ->count(8)
-            ->create();
+        $tools = [
+            [
+                'name' => 'Drill #1',
+                'status' => 'available',
+                'usage_status' => 'low',
+                'total_usage_hours' => 10,
+                'maintenance_threshold_hours' => 100,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Hammer #2',
+                'status' => 'in_use',
+                'usage_status' => 'medium',
+                'total_usage_hours' => 45,
+                'maintenance_threshold_hours' => 80,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Chainsaw #3',
+                'status' => 'maintenance',
+                'usage_status' => 'high',
+                'total_usage_hours' => 120,
+                'maintenance_threshold_hours' => 150,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Lawn Mower #4',
+                'status' => 'available',
+                'usage_status' => 'medium',
+                'total_usage_hours' => 60,
+                'maintenance_threshold_hours' => 100,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Shovel #5',
+                'status' => 'available',
+                'usage_status' => 'low',
+                'total_usage_hours' => 5,
+                'maintenance_threshold_hours' => 80,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Rake #6',
+                'status' => 'in_use',
+                'usage_status' => 'medium',
+                'total_usage_hours' => 30,
+                'maintenance_threshold_hours' => 80,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Pressure Washer #7',
+                'status' => 'maintenance',
+                'usage_status' => 'high',
+                'total_usage_hours' => 140,
+                'maintenance_threshold_hours' => 150,
+                'is_active' => true,
+            ],
+        ];
 
         foreach ($tools as $tool) {
-
-            // 1. Random active booking (some tools only)
-            if (fake()->boolean(60)) {
-
-                $booking = Booking::create([
-                    'tool_id' => $tool->id,
-                    'member_id' => $saged->id,
-                    'start_time' => now()->subHours(2),
-                    'end_time' => now()->addHours(2),
-                    'status' => 'active',
-                    'qr_token' => fake()->uuid(),
-                    'picked_up_at' => now()->subHours(2),
-                ]);
-
-                // enforce consistency
-                $tool->update(['status' => 'in_use']);
-            }
-
-            // 3. Penalties linked to bookings
-            if (isset($booking) && fake()->boolean(40)) {
-
-                Penalty::create([
-                    'member_id' => $saged->id,
-                    'booking_id' => $booking->id,
-                    'type' => 'service',
-                    'severity' => 'medium',
-                    'amount' => 5,
-                    'status' => 'pending',
-                    'reason' => 'Seed generated penalty',
-                ]);
-            }
-
-            unset($booking);
+            Tool::create($tool);
         }
     }
 }
