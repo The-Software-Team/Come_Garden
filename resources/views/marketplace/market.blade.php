@@ -61,7 +61,7 @@
 
 
 {{-- Surplus alert banner (Feature 35) --}}
-@if($surplusAlerts->isNotEmpty())
+<!-- @if($surplusAlerts->isNotEmpty())
     <div class="market_surplus_banner">
         <i class="ti ti-plant-2"></i>
         <span>Your upcoming harvests:</span>
@@ -72,12 +72,12 @@
                 </span>
             @endforeach
         </div>
-        <span style="margin-left:auto; font-size:11px;">
+        <span>
             Consider posting a listing early!
         </span>
     </div>
 @endif
-
+ -->
 
 {{-- Main layout --}}
 <div class="market_layout">
@@ -917,10 +917,11 @@ function startCountdown(el, expiresAt) {
     countdownIntervals.forEach(clearInterval);
     countdownIntervals.length = 0;
 
+
     function tick() {
         const diff = new Date(expiresAt) - new Date();
         if (diff <= 0) {
-            el.textContent = 'Expired';
+            el.textContent = 'Expiring'; // TODO:FIX
             return;
         }
         const h = Math.floor(diff / 3600000);

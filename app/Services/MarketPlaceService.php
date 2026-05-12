@@ -53,7 +53,7 @@ class MarketPlaceService extends BaseService implements Market
             // Flash trade: set expiry
             if (($data['type'] ?? '') === 'flash') {
                 $hours = $data['pickup_window_hours'] ?? self::FLASH_DEFAULT_HOURS;
-                $data['expires_at'] = Carbon::now()->addHours($hours);
+                $data['expires_at'] = Carbon::now()->addHours((int) $hours);
             }
 
             // Gift trade: price = 0, award karma
@@ -180,7 +180,7 @@ class MarketPlaceService extends BaseService implements Market
     public function claimFlashListing(int $listingId, int $userId): array
     {
         $listing = Listing::findOrFail($listingId);
-
+        
         if ($listing->type !== 'flash') {
             return ['success' => false, 'message' => 'This is not a flash listing.'];
         }
@@ -189,6 +189,7 @@ class MarketPlaceService extends BaseService implements Market
             $listing->update(['status' => 'expired']);
             return ['success' => false, 'message' => 'This flash listing has expired.'];
         }
+
 
         return $this->createTrade([
             'listing_id' => $listingId,
